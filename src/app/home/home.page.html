@@ -10,24 +10,22 @@
 </ion-header>
 
 <ion-content>
-    <ion-card tappable (click)="navigate('aa')">
+    <ion-card tappable (click)="navigate('measurement-view')">
         <ion-card-header>
             <ion-card-title>Tomar medidas</ion-card-title>
         </ion-card-header>
     </ion-card>
-    <!-- [routerDirection]="'root'" [routerLink]="/measurement-view"
-    -->
-    <ion-card>
+    <ion-card tappable (click)="navigate('component-list')">
         <ion-card-header>
             <ion-card-title>Ver componentes</ion-card-title>
         </ion-card-header>
     </ion-card>
-    <ion-card>
+    <ion-card tappable (click)="navigate('component-view')">
         <ion-card-header>
             <ion-card-title>Crear componente</ion-card-title>
         </ion-card-header>
     </ion-card>
-    <ion-card>
+    <ion-card tappable (click)="navigate('sensor-view')">
         <ion-card-header>
             <ion-card-title>Crear sensor</ion-card-title>
         </ion-card-header>

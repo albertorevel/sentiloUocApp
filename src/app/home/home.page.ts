@@ -12,7 +12,7 @@ export class HomePage {
   constructor (public router: Router) {}
 
   navigate(route: string) {
-    this.router.navigate(['/measurement-view'])
+    this.router.navigate([route])
     console.log('controller navigate')
   }
 }
