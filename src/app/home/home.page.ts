@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Router} from '@angular/router';
+
 
 @Component({
   selector: 'app-home',
@@ -7,4 +9,10 @@ import { Component } from '@angular/core';
 })
 export class HomePage {
 
+  constructor (public router: Router) {}
+
+  navigate(route: string) {
+    this.router.navigate(['/measurement-view'])
+    console.log('controller navigate')
+  }
 }
