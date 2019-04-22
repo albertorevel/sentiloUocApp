@@ -15,7 +15,7 @@ const routes: Routes = [
   { path: 'component-view', loadChildren: './pages/components/component-view/component-view.module#ComponentViewPageModule' },
   { path: 'sensor-list', loadChildren: './pages/sensors/sensor-list/sensor-list.module#SensorListPageModule' },
   { path: 'sensor-view', loadChildren: './pages/sensors/sensor-view/sensor-view.module#SensorViewPageModule' },
-  { path: 'measurement-view', loadChildren: './pages/sensors/measurement-view/measurement-view.module#MeasurementViewPageModule' },
+  { path: 'measurement-view/:measurement-id/:modify', loadChildren: './pages/sensors/measurement-view/measurement-view.module#MeasurementViewPageModule' },
   { path: 'change-password', loadChildren: './pages/user/change-password/change-password.module#ChangePasswordPageModule' },
   { path: 'log-out', redirectTo: 'home', pathMatch: 'full'}
 ];

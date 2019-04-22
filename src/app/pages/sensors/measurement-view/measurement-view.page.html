@@ -20,17 +20,18 @@
 
         <ion-button color="primary" expand="block" [disabled]="!measurementGroup.valid" (click)="loginForm()">Login</ion-button>
     </form> -->
-    <form #measurementForm="ngForm">
+    <form #measurementForm="ngForm" padding-right padding-left>
         <ion-item>
             <ion-label position="floating">Name</ion-label>
-            <ion-input type="text" required [(ngModel)]="measurement.name" name="name"></ion-input>
+            <ion-input type="text" required [(ngModel)]="measurement.name" name="name" class="form-control" [readonly]="!modify" [disabled]="!modify"></ion-input>
         </ion-item>
 
         <ion-item>
             <ion-label position="floating">Data</ion-label>
-            <ion-input type="number" required [(ngModel)]="measurement.data" name="measurement"></ion-input>
+            <ion-input type="number" inputmode="numeric" required [(ngModel)]="measurement.data" name="measurement" class="form-control" [readonly]="!modify" [disabled]="!modify"></ion-input>
         </ion-item>
-        <ion-button (click)="submit()" [disabled]="!measurementForm.form.valid">
+
+        <ion-button (click)="submit()" [disabled]="!measurementForm.form.valid" class="btn btn-default" [hidden]="!modify">
             Click me
         </ion-button>
 
