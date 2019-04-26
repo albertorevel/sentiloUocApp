@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
-import { Measurement } from 'src/model/measurement';
+import { Measurement } from 'src/app/model/sentilo/measurement';
 import { ToastController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ModelService } from 'src/app/services/model.service';
 
 @Component({
   selector: 'app-measurement-view',
@@ -13,45 +14,37 @@ export class MeasurementViewPage implements OnInit {
 
   measurement:Measurement
   modify:boolean
-  id:number
   // nameInput:FormControl
   // dataInput:FormControl
 
   constructor(
     public toastController: ToastController,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private modelService: ModelService
     ) { }
 
   ngOnInit() {
 
-    // this.nameInput = new FormControl('', Validators.required)
-    // this.dataInput = new FormControl(0, Validators.required)
-    // this.measurementGroup = this.formBuilder.group({
-    //   nameInput: new FormControl('', Validators.required),
-    //   dataInput: new FormControl(0, Validators.compose([
-    //     Validators.required,
-    //     Validators.pattern('^[0-9]+([\.,][0-9]+)')
-    //   ]))
-    // })
-    // this.measurementGroup = new FormGroup({
-    //   nameInput: new FormControl('', Validators.required),
-    //   dataInput: new FormControl(0, Validators.required)
-    // })
+    // We read parameters and prepare data
 
-    this.measurement = new Measurement()
-    // this.modify = this.route.snapshot.paramMap.get('measurement-id')
-    this.modify = this.route.snapshot.paramMap.get('modify') === "true"
-    this.id = parseInt(this.route.snapshot.paramMap.get('measurement-id'), 10)
-    console.log(this.route.snapshot)
-    
+    this.modify = this.route.snapshot.paramMap.get('modify') === "true";
+    var id = parseInt(this.route.snapshot.paramMap.get('measurement-id'), 10);
 
+    if (typeof id !== "undefined" && id != null && id > 0) {
+      this.measurement = this.modelService.getMeasurement(id);
+    }
+    else {
+      id = null
+      this.measurement = new Measurement();
+      this.modify = true;
+    }
   }
 
   async submit() {
 
     const toast = await this.toastController.create({
-      message: `Measurement [${this.id}] submitted${this.measurement.name}with value: ${this.measurement.data}`,
+      message: `Measurement [${this.measurement}] submitted`,
       duration: 2000
     });
     toast.present();

@@ -3,7 +3,7 @@
         <ion-buttons slot="start">
             <ion-back-button></ion-back-button>
         </ion-buttons>
-        <ion-title>measurement-view</ion-title>
+        <ion-title>Measurement with id {{measurement.id}}</ion-title>
     </ion-toolbar>
 </ion-header>
 
@@ -20,15 +20,25 @@
 
         <ion-button color="primary" expand="block" [disabled]="!measurementGroup.valid" (click)="loginForm()">Login</ion-button>
     </form> -->
-    <form #measurementForm="ngForm" padding-right padding-left>
+    <form #measurementForm="ngForm">
         <ion-item>
-            <ion-label position="floating">Name</ion-label>
-            <ion-input type="text" required [(ngModel)]="measurement.name" name="name" class="form-control" [readonly]="!modify" [disabled]="!modify"></ion-input>
+            <ion-label position="floating">Value</ion-label>
+            <ion-input type="text" required [(ngModel)]="measurement.value" name="value" class="form-control" [readonly]="!modify" [disabled]="!modify"></ion-input>
         </ion-item>
 
         <ion-item>
-            <ion-label position="floating">Data</ion-label>
-            <ion-input type="number" inputmode="numeric" required [(ngModel)]="measurement.data" name="measurement" class="form-control" [readonly]="!modify" [disabled]="!modify"></ion-input>
+            <ion-label position="floating">Date</ion-label>
+            <ion-input type="Date" inputmode="Date" placeholder=null required [(ngModel)]="measurement.date" name="date" class="form-control" [readonly]="!modify" [disabled]="!modify"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="floating">Longitude</ion-label>
+            <ion-input type="number" inputmode="number" required [(ngModel)]="measurement.location.longitude" name="longitude" class="form-control" [readonly]="!modify" [disabled]="!modify"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="floating">Latitude</ion-label>
+            <ion-input type="number" inputmode="number" required [(ngModel)]="measurement.location.latitude" name="latitude" class="form-control" [readonly]="!modify" [disabled]="!modify"></ion-input>
         </ion-item>
 
         <ion-button (click)="submit()" [disabled]="!measurementForm.form.valid" class="btn btn-default" [hidden]="!modify">

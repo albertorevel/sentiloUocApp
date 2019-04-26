@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { ToastController } from '@ionic/angular';
+import { ActivatedRoute } from '@angular/router';
+import { ModelService } from 'src/app/services/model.service';
+import { CustomComponent } from 'src/app/model/sentilo/customComponent';
 
 @Component({
   selector: 'app-component-view',
@@ -6,10 +10,41 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./component-view.page.scss'],
 })
 export class ComponentViewPage implements OnInit {
+  
+  customComponent:CustomComponent
+  modify:boolean
 
-  constructor() { }
+  constructor(
+    public toastController: ToastController,
+    private route: ActivatedRoute,
+    private modelService: ModelService
+    ) { }
 
   ngOnInit() {
+
+    // We read parameters and prepare data
+    this.modify = this.route.snapshot.paramMap.get('modify') === "true";
+    var id = parseInt(this.route.snapshot.paramMap.get('component-id'), 10);
+
+    if (typeof id !== "undefined" && id != null && id > 0) {
+      this.customComponent = this.modelService.getComponent(id);
+    }
+    else {
+      id = null
+      this.customComponent = new CustomComponent();
+      this.modify = true;
+    }
+
+    console.log(this.customComponent);
+  }
+
+  async submit() {
+
+    const toast = await this.toastController.create({
+      message: `Component [${this.customComponent}] submitted`,
+      duration: 2000
+    });
+    toast.present();
   }
 
 }

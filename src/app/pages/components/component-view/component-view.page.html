@@ -3,10 +3,41 @@
         <ion-buttons slot="start">
             <ion-back-button></ion-back-button>
         </ion-buttons>
-        <ion-title>component-view</ion-title>
+        <ion-title>Component with id {{customComponent.id}}</ion-title>
     </ion-toolbar>
 </ion-header>
 
 <ion-content>
+    <form #componentForm="ngForm">
+        <ion-item [hidden]="customComponent.id">
+            <ion-label position="floating">Iden</ion-label>
+            <ion-input type="text" required [(ngModel)]="customComponent.value" name="value" class="form-control" [readonly]="!modify" [disabled]="!modify"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="floating">TypeName</ion-label>
+            <ion-input type="text" inputmode="text" required [(ngModel)]="customComponent.type.name" name="typeName" class="form-control" [readonly]="!modify" [disabled]="!modify"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="floating">Description</ion-label>
+            <ion-input type="text" inputmode="text" required [(ngModel)]="customComponent.description" name="description" class="form-control" [readonly]="!modify" [disabled]="!modify"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="floating">Longitude</ion-label>
+            <ion-input type="number" inputmode="number" required [(ngModel)]="customComponent.location.longitude" name="longitude" class="form-control" [readonly]="!modify" [disabled]="!modify"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="floating">Latitude</ion-label>
+            <ion-input type="number" inputmode="number" required [(ngModel)]="customComponent.location.latitude" name="latitude" class="form-control" [readonly]="!modify" [disabled]="!modify"></ion-input>
+        </ion-item>
+
+        <ion-button (click)="submit()" [disabled]="!componentForm.form.valid" class="btn btn-default" [hidden]="!modify">
+            Click me
+        </ion-button>
+
+    </form>
 
 </ion-content>

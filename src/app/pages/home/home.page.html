@@ -1,0 +1,33 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>
+            Bienvenido/a
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-card tappable (click)="navigate('measurement-view',0,true)">
+        <ion-card-header>
+            <ion-card-title>Tomar medidas</ion-card-title>
+        </ion-card-header>
+    </ion-card>
+    <ion-card tappable (click)="navigate('component-list')">
+        <ion-card-header>
+            <ion-card-title>Ver componentes</ion-card-title>
+        </ion-card-header>
+    </ion-card>
+    <ion-card tappable (click)="navigate('component-view',0,true)">
+        <ion-card-header>
+            <ion-card-title>Crear componente</ion-card-title>
+        </ion-card-header>
+    </ion-card>
+    <ion-card tappable (click)="navigate('sensor-view',0,true)">
+        <ion-card-header>
+            <ion-card-title>Crear sensor</ion-card-title>
+        </ion-card-header>
+    </ion-card>
+</ion-content>
