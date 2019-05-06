@@ -3,14 +3,14 @@ import { CustomLocation } from '../customLocation';
 
 export class Measurement {
 
-    private _value: String;
+    private _value: string;
     private _date: Date;
     private _location: CustomLocation;
     
-    public get value(): String {
+    public get value(): string {
         return this._value;
     }
-    public set value(value: String) {
+    public set value(value: string) {
         this._value = value;
     }
 
@@ -28,7 +28,7 @@ export class Measurement {
         this._location = value;
     }
 
-    public fillData(value: String, date: Date, location: CustomLocation) {
+    public fillData(value: string, date: Date, location: CustomLocation) {
         this.value = value;
         this.date = date;
         this.location = location;

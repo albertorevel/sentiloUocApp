@@ -3,10 +3,35 @@
         <ion-buttons slot="start">
             <ion-back-button></ion-back-button>
         </ion-buttons>
-        <ion-title>sensor-view</ion-title>
+        <ion-title>Sensor {{sensor.id}}</ion-title>
     </ion-toolbar>
 </ion-header>
 
 <ion-content>
+    <form #sensorForm="ngForm">
+        <ion-item>
+            <ion-label position="floating">Type</ion-label>
+            <ion-input type="text" [(ngModel)]="sensor.type.id" name="sensorType" class="form-control" [readonly]="!modify" [disabled]="!modify"></ion-input>
+        </ion-item>
 
+        <!-- <ion-item>
+            <ion-label position="floating">Date</ion-label>
+            <ion-input type="Date" inputmode="Date" placeholder=null required [(ngModel)]="measurement.date" name="date" class="form-control" [readonly]="!modify" [disabled]="!modify"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="floating">Longitude</ion-label>
+            <ion-input type="number" inputmode="number" required [(ngModel)]="measurement.location.longitude" name="longitude" class="form-control" [readonly]="!modify" [disabled]="!modify"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="floating">Latitude</ion-label>
+            <ion-input type="number" inputmode="number" required [(ngModel)]="measurement.location.latitude" name="latitude" class="form-control" [readonly]="!modify" [disabled]="!modify"></ion-input>
+        </ion-item>
+ -->
+        <ion-button (click)="submit()" [disabled]="!sensorForm.form.valid" class="btn btn-default" [hidden]="!modify">
+            Click me
+        </ion-button>
+
+    </form>
 </ion-content>

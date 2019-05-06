@@ -1,23 +1,16 @@
 import { CustomComponentType } from './customComponentType';
 import { CustomLocation } from '../customLocation';
+import { Sensor } from './sensor';
 
 export class CustomComponent {
 
-    private _id: String = '';
-    private _description: String = '';   
+    private _id: string = '';
+    private _description: string = '';   
     private _location: CustomLocation = new CustomLocation();
-    private _type: CustomComponentType = new CustomComponentType('','');
+    private _type: CustomComponentType = new CustomComponentType('');
+    private _sensors: Array<Sensor> = new Array();
 
-    // constructor() {
-    //     this.location = new CustomLocation();
-    //     this.type = new CustomComponentType('','');
-    // }
-
-    // constructor() {
-    //     console.log("aaa  " + this);
-    //     this.location = new CustomLocation();
-    //     this.type = new CustomComponentType('','');
-    // }
+    constructor() { }
 
     public get type(): CustomComponentType {
         return this._type;
@@ -26,17 +19,17 @@ export class CustomComponent {
         this._type = value;
     }
    
-    public get id(): String {
+    public get id(): string {
         return this._id;
     }
-    public set id(value: String) {
+    public set id(value: string) {
         this._id = value;
     }
 
-    public get description(): String {
+    public get description(): string {
         return this._description;
     }
-    public set description(value: String) {
+    public set description(value: string) {
         this._description = value;
     }
 
@@ -47,7 +40,14 @@ export class CustomComponent {
         this._location = value;
     }
 
-    public fillData(id: String, description:String, location:CustomLocation, type:CustomComponentType) {
+    public get sensors(): Array<Sensor> {
+        return this._sensors;
+    }
+    public set sensors(value: Array<Sensor>) {
+        this._sensors = value;
+    }
+
+    public fillData(id: string, description:string, location:CustomLocation, type:CustomComponentType) {
         this.id = id;
         this.description = description;
         this.location = location;

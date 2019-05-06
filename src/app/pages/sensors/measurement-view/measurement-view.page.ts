@@ -39,6 +39,8 @@ export class MeasurementViewPage implements OnInit {
       this.measurement = new Measurement();
       this.modify = true;
     }
+
+    console.log(this.modelService.sensors);
   }
 
   async submit() {

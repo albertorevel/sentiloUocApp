@@ -4,17 +4,43 @@ import { Sensor } from '../model/sentilo/sensor';
 import { CustomLocation } from '../model/customLocation';
 import { CustomComponentType } from '../model/sentilo/customComponentType';
 import { CustomComponent } from '../model/sentilo/customComponent';
+import { SensorType } from '../model/sentilo/sensorType';
+import { SentiloApiService } from './sentilo-api.service';
+import { Observable, from } from 'rxjs';
+import { HTTP } from '@ionic-native/http/ngx';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ModelService {
 
-  public componentsList:Array<CustomComponent>
-  public sensorsList:Array<Sensor>
-  private customComponentTypestList:Array<CustomComponentType>
+  public components = {};
+  public sensors = {};
+  private customComponentTypes = {};
+  private sensorTypes = {};
+/*
+  httpOptions1 = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json; charset=UTF-8',
+      'IDENTITTY_KEY': ''
+    })
+  }
 
-  constructor() {}
+  httpOptions2 = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json; charset=UTF-8',
+      'IDENTITY_KEY': '81d0e9c5d1b0dcc9ee9a15333774da126744ca3ee80c1254d58375f73d1b4095'
+    })
+  }
+*/
+  httpOptions1String = {'Content-Type': 'application/json; charset=UTF-8',
+  'IDENTITY_KEY': '8de83e2f39505b22c237b92093c7ed01e671f01b479d6706d7cc68b2b3a82bf2'};
+
+  httpOptions2String = {'Content-Type': 'application/json; charset=UTF-8',
+  'IDENTITY_KEY': '81d0e9c5d1b0dcc9ee9a15333774da126744ca3ee80c1254d58375f73d1b4095'};
+
+
+  constructor(private sentiloAPIService: SentiloApiService, private nativeHttp:HTTP) {}
 
   getMeasurement(id:Number): Measurement {
       
@@ -48,20 +74,129 @@ export class ModelService {
     return customComponent;
   }
 
+  getSensor(id: string): Sensor {
+      
+    // TODO canviar per recuperar des de l'API???
+    var sensor: Sensor = this.sensors[id];
+
+    return sensor;
+  }
+
+  getMeasurements(sensorId: string, limit: number) {
+    // http://<your_api_server.com>/data/<provider_id>/<sensor_id>?<parameter>=<value>
+    var providerId = 'uoc@waqi';
+    return from(this.nativeHttp.get(`https://api-sentilo.diba.cat/data/${providerId}/${sensorId}?limit=${limit}`,{},this.httpOptions2String));
+    
+  }
+
   fillCustomComponentTypes() {
     var customComponentTypesList: Array<CustomComponentType> = new Array();
 
-    var customComponentType : CustomComponentType = new CustomComponentType("comptyp1","component type 1");
+    var customComponentType : CustomComponentType = new CustomComponentType("comptyp1");
+    customComponentType.name = "component type 1";
 
-    this.customComponentTypestList = customComponentTypesList;
+    this.customComponentTypes[customComponentType.id] = customComponentType;
   }
 
   getCustomComponentTypeList() {
     
-    if (this.customComponentTypestList = undefined) {
+    if (this.customComponentTypes = undefined) {
       this.fillCustomComponentTypes();
     }
 
-    return this.customComponentTypestList;
+    return this.customComponentTypes;
   }
-}
+
+  findAllElements() {
+
+    var observable = Observable.create((observer:any) => {
+        //console.log(this.httpOptions2);
+        //return this.http.get('http://localhost:8100/catalog', this.httpOptions2);
+        //return this.http.get('https://api-sentilo.diba.cat/catalog', this.httpOptions2);
+        this.nativeHttp.get('https://api-sentilo.diba.cat/catalog',{}, this.httpOptions2String).then( data => {
+            this.parseElements(data);
+            observer.next(true);
+          }
+        )
+    });
+
+    return observable;
+    
+    
+    //this.sentiloAPIService.findElements().subscribe(data => );
+   // this.parseElements(this.AllElementsResponse);
+  }
+
+  getAllSensors() {
+    return Object.values(this.sensors);
+  }
+
+  parseElements(rawData) {
+    
+    if(rawData && rawData.data) {
+      let data = JSON.parse(rawData.data);
+
+      try {
+        for (let provider of data['providers']) {
+          for (let sensor of provider['sensors']) {
+          
+            //SENSOR
+            var newSensor = new Sensor();
+            var newLocation = new CustomLocation();
+            newLocation.fillDataString(sensor['location']);
+            newSensor.fillData(sensor['sensor'],
+              sensor['description'],
+              newLocation,
+              null);
+    
+            this.sensors[sensor.sensor] = newSensor;
+            
+            
+            // SENSORTYPÊ
+            var sensorTypeName = sensor['type'];
+            var sensorType:SensorType = this.sensorTypes[sensorTypeName];
+           
+            if (!sensorType) {
+              sensorType = new SensorType(sensorTypeName);
+              this.sensorTypes[sensorTypeName] = sensorType;
+            }
+
+            newSensor.type = sensorType;
+            
+    
+            // CUSTOMCOMPONENTTYPE
+           
+            var customComponentTypeId = sensor['componentType'];
+            var customComponentType = this.customComponentTypes[customComponentTypeId];
+
+            if (!customComponentType) {
+              var newCustomComponentType = new CustomComponentType(customComponentTypeId);
+              this.customComponentTypes[customComponentTypeId] = newCustomComponentType;
+            }
+
+            // CUSTOMCOMPONENT
+            var customComponentId = sensor['component'];
+            var customComponent = this.components[customComponentId]
+    
+            if (!customComponent) {
+              customComponent = new CustomComponent();
+              customComponent.fillData(customComponentId, sensor['componentDesc'], newLocation, customComponentType);
+              this.components[customComponentId] = customComponent;
+            }
+
+            customComponent.sensors.push(newSensor);
+            newSensor.customComponent = customComponent;
+            
+          }
+        }
+      }
+      catch(e) {
+        console.log(e);
+        //TODO: ver que hacer
+      }
+
+    }
+    
+  }
+
+  }

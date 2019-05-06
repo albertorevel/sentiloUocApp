@@ -10,7 +10,7 @@
 <ion-content>
     <form #componentForm="ngForm">
         <ion-item [hidden]="customComponent.id">
-            <ion-label position="floating">Iden</ion-label>
+            <ion-label position="floating">Identificador</ion-label>
             <ion-input type="text" required [(ngModel)]="customComponent.value" name="value" class="form-control" [readonly]="!modify" [disabled]="!modify"></ion-input>
         </ion-item>
 

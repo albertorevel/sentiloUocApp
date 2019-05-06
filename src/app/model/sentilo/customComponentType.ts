@@ -1,24 +1,24 @@
 export class CustomComponentType {
 
-    private _id: String;
-    private _name: String;
+    private _id: string;
+    private _name: string;
     
-    constructor (id:String, name: String) {
+    constructor (id:string) {
         this.id = id;
-        this.name = name;   
+        this.name = '';   
     }
 
-    public get id(): String {
+    public get id(): string {
         return this._id;
     }
-    public set id(value: String) {
+    public set id(value: string) {
         this._id = value;
     }
 
-    public get name(): String {
+    public get name(): string {
         return this._name;
     }
-    public set name(value: String) {
+    public set name(value: string) {
         this._name = value;
     }
     
