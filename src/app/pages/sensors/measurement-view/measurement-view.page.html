@@ -8,19 +8,7 @@
 </ion-header>
 
 <ion-content>
-    <!-- <form [formGroup]="measurementGroup" padding-right>
-        <ion-item>
-            <ion-label position="floating">Email/Username</ion-label>
-            <ion-input type="text" formControlName="name" required></ion-input>
-        </ion-item>
-        <ion-item>
-            <ion-label position="floating">Password</ion-label>
-            <ion-input type="number" formControlName="data" required></ion-input>
-        </ion-item>
-
-        <ion-button color="primary" expand="block" [disabled]="!measurementGroup.valid" (click)="loginForm()">Login</ion-button>
-    </form> -->
-    <form #measurementForm="ngForm">
+    <!-- <form #measurementForm="ngForm">
         <ion-item>
             <ion-label position="floating">Value</ion-label>
             <ion-input type="text" required [(ngModel)]="measurement.value" name="value" class="form-control" [readonly]="!modify" [disabled]="!modify"></ion-input>
@@ -45,5 +33,5 @@
             Click me
         </ion-button>
 
-    </form>
+    </form> -->
 </ion-content>

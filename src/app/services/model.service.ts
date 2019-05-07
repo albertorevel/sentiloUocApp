@@ -42,69 +42,65 @@ export class ModelService {
 
   constructor(private sentiloAPIService: SentiloApiService, private nativeHttp:HTTP) {}
 
-  getMeasurement(id:Number): Measurement {
+  // getMeasurement(id:Number): Measurement {
       
-    console.log('hey1');
+  //   console.log('hey1');
 
-    var measurement:Measurement = new Measurement();
-    var location = new CustomLocation();
-    location.fillData(3,3.2);
+  //   var measurement:Measurement = new Measurement();
+  //   var location = new CustomLocation();
+  //   location.fillData(3,3.2);
 
-    measurement.fillData("35", new Date(),location);
+  //   measurement.fillData("35", new Date(),location);
 
-    console.log(measurement);
+  //   console.log(measurement);
 
-    return measurement;
-  }
+  //   return measurement;
+  // }
 
-  getComponent(id:Number): CustomComponent {
+  // getComponent(id:Number): CustomComponent {
       
-    console.log('hey3');
+  //   console.log('hey3');
 
-    var customComponent:CustomComponent = new CustomComponent();
-    var location = new CustomLocation();
-    location.fillData(3,3.2);
+  //   var customComponent:CustomComponent = new CustomComponent();
+  //   var location = new CustomLocation();
+  //   location.fillData(3,3.2);
 
-    var type = this.getCustomComponentTypeList()[0];
+  //   var type = this.getCustomComponentTypeList()[0];
 
-    customComponent.fillData("35", "An example",location,type);
+  //   customComponent.fillData("35", "An example",location,type);
 
-    console.log(customComponent);
+  //   console.log(customComponent);
 
-    return customComponent;
-  }
-
-  getSensor(id: string): Sensor {
-      
-    // TODO canviar per recuperar des de l'API???
-    var sensor: Sensor = this.sensors[id];
-
-    return sensor;
-  }
+  //   return customComponent;
+  // } 
 
   getMeasurements(sensorId: string, limit: number) {
     // http://<your_api_server.com>/data/<provider_id>/<sensor_id>?<parameter>=<value>
-    var providerId = 'uoc@waqi';
-    return from(this.nativeHttp.get(`https://api-sentilo.diba.cat/data/${providerId}/${sensorId}?limit=${limit}`,{},this.httpOptions2String));
+    var providerId = 'uoc@arevelproveidor';
+
+    return from(this.nativeHttp.get(`https://api-sentilo.diba.cat/data/${providerId}/${sensorId}?limit=${limit}`,{},this.httpOptions1String));
     
   }
 
-  fillCustomComponentTypes() {
-    var customComponentTypesList: Array<CustomComponentType> = new Array();
-
-    var customComponentType : CustomComponentType = new CustomComponentType("comptyp1");
-    customComponentType.name = "component type 1";
-
-    this.customComponentTypes[customComponentType.id] = customComponentType;
+  /**
+   * Returns all the components retrieved for the provider
+   */
+  getAllComponents(): Array<CustomComponent> {
+    return Object.values(this.components);
   }
 
-  getCustomComponentTypeList() {
-    
-    if (this.customComponentTypes = undefined) {
-      this.fillCustomComponentTypes();
-    }
+  /**
+   * Returns a component with an id passed as a parameter
+   */
+  getComponent(id: string): CustomComponent {
+    return this.components[id];
+  }
 
-    return this.customComponentTypes;
+  /**
+   * Returns a sensor with an id passed as a parameter
+   */
+  getSensor(id: string): Sensor {
+    return this.sensors[id];
   }
 
   findAllElements() {
@@ -113,7 +109,7 @@ export class ModelService {
         //console.log(this.httpOptions2);
         //return this.http.get('http://localhost:8100/catalog', this.httpOptions2);
         //return this.http.get('https://api-sentilo.diba.cat/catalog', this.httpOptions2);
-        this.nativeHttp.get('https://api-sentilo.diba.cat/catalog',{}, this.httpOptions2String).then( data => {
+        this.nativeHttp.get('https://api-sentilo.diba.cat/catalog',{}, this.httpOptions1String).then( data => {
             this.parseElements(data);
             observer.next(true);
           }
@@ -122,13 +118,6 @@ export class ModelService {
 
     return observable;
     
-    
-    //this.sentiloAPIService.findElements().subscribe(data => );
-   // this.parseElements(this.AllElementsResponse);
-  }
-
-  getAllSensors() {
-    return Object.values(this.sensors);
   }
 
   parseElements(rawData) {
@@ -170,8 +159,8 @@ export class ModelService {
             var customComponentType = this.customComponentTypes[customComponentTypeId];
 
             if (!customComponentType) {
-              var newCustomComponentType = new CustomComponentType(customComponentTypeId);
-              this.customComponentTypes[customComponentTypeId] = newCustomComponentType;
+              customComponentType = new CustomComponentType(customComponentTypeId);
+              this.customComponentTypes[customComponentTypeId] = customComponentType;
             }
 
             // CUSTOMCOMPONENT

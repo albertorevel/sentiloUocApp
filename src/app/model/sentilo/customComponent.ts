@@ -11,13 +11,6 @@ export class CustomComponent {
     private _sensors: Array<Sensor> = new Array();
 
     constructor() { }
-
-    public get type(): CustomComponentType {
-        return this._type;
-    }
-    public set type(value: CustomComponentType) {
-        this._type = value;
-    }
    
     public get id(): string {
         return this._id;
@@ -45,6 +38,13 @@ export class CustomComponent {
     }
     public set sensors(value: Array<Sensor>) {
         this._sensors = value;
+    }
+
+    public get type(): CustomComponentType {
+        return this._type;
+    }
+    public set type(value: CustomComponentType) {
+        this._type = value;
     }
 
     public fillData(id: string, description:string, location:CustomLocation, type:CustomComponentType) {

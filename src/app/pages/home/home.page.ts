@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router} from '@angular/router';
 import { ModelService } from 'src/app/services/model.service';
+import { CustomComponent } from 'src/app/model/sentilo/customComponent';
 
 
 @Component({
@@ -10,14 +11,15 @@ import { ModelService } from 'src/app/services/model.service';
 })
 export class HomePage {
 
-  public sensors;
+  public components: Array<CustomComponent>;
   public loaded = false;
 
   constructor (public router: Router, private modelService: ModelService) {
     
+    // Recupera todos los elementos y desactiva el loading spinner cuando se han recuperado
     modelService.findAllElements().subscribe(result => {
       if(result) {
-        this.sensors = modelService.getAllSensors();
+        this.components = modelService.getAllComponents();
         this.loaded = true;
       }
     });
@@ -29,6 +31,6 @@ export class HomePage {
   }
 
   navigate2(id: string) {
-    this.router.navigate(['sensor-view',id,false]);
+    this.router.navigate(['component-view',id,false]);
   }
 }

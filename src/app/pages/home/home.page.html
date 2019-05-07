@@ -12,7 +12,19 @@
 <main class="scroll-content">
     <ion-spinner [hidden]="loaded"></ion-spinner>
     <ion-list [hidden]="!loaded">
-        <ion-item *ngFor="let sensor of sensors" detail="true" (click)="navigate2(sensor.id)">
+        <ion-card *ngFor="let component of components" tappable (click)="navigate2(component.id) ">
+            <ion-card-header>
+                <ion-card-title color="primary ">{{component.id}} ({{component.type.id}})</ion-card-title>
+                <ion-text>{{component.description}}</ion-text>
+                <ion-list *ngFor="let sensor of component.sensors">
+                    <ion-item>
+                        <ion-label>{{sensor.id}} ({{sensor.type.id}})</ion-label>
+                    </ion-item>
+                </ion-list>
+            </ion-card-header>
+
+        </ion-card>
+        <!-- <ion-item *ngFor="let component of components" detail="true" (click)="navigate2(sensor.id)">
             <ion-label>
                 <ion-text color="primary " class="title ">
                     <h1>{{sensor.id}}</h1>
@@ -20,7 +32,7 @@
                 </ion-text>
                 <ion-text> {{sensor.description}}</ion-text>
             </ion-label>
-        </ion-item>
+        </ion-item> -->
     </ion-list>
 </main>
 

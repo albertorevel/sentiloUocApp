@@ -24,10 +24,11 @@ export class ComponentViewPage implements OnInit {
 
     // We read parameters and prepare data
     this.modify = this.route.snapshot.paramMap.get('modify') === "true";
-    var id = parseInt(this.route.snapshot.paramMap.get('component-id'), 10);
+    var id = this.route.snapshot.paramMap.get('component-id');
 
-    if (typeof id !== "undefined" && id != null && id > 0) {
+    if (typeof id !== "undefined" && id != null) {
       this.customComponent = this.modelService.getComponent(id);
+      //TODO error
     }
     else {
       id = null
