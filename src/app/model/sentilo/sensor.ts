@@ -6,9 +6,13 @@ import { Measurement } from './measurement';
 export class Sensor {
     
     private _id:string; 
+    private _newId: number; // TODO
+    
     private _description:string;
     private _location:CustomLocation;
     private _type:SensorType;
+    private _unit: string;//TODO
+    private _dataType: string; //TODO
     private _customComponent:CustomComponent;
     private _measurements: Array<Measurement>;
     
@@ -26,6 +30,13 @@ export class Sensor {
         this._id = value;
     }
 
+    public get newId(): number {
+        return this._newId;
+    }
+    public set newId(value: number) {
+        this._newId = value;
+    }
+    
     public get description(): string {
         return this._description;
     }

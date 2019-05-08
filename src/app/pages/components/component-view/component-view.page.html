@@ -3,7 +3,7 @@
         <ion-buttons slot="start">
             <ion-back-button></ion-back-button>
         </ion-buttons>
-        <ion-title>Component with id {{customComponent.id}}</ion-title>
+        <ion-title>Component: {{customComponent.id}}</ion-title>
     </ion-toolbar>
 </ion-header>
 
@@ -15,8 +15,8 @@
         </ion-item>
 
         <ion-item>
-            <ion-label position="floating">TypeName</ion-label>
-            <ion-input type="text" inputmode="text" required [(ngModel)]="customComponent.type.name" name="typeName" class="form-control" [readonly]="!modify" [disabled]="!modify"></ion-input>
+            <ion-label position="floating">Type</ion-label>
+            <ion-input type="text" inputmode="text" required [(ngModel)]="customComponent.type.id" name="typeName" class="form-control" [readonly]="!modify" [disabled]="!modify"></ion-input>
         </ion-item>
 
         <ion-item>
@@ -34,10 +34,63 @@
             <ion-input type="number" inputmode="number" required [(ngModel)]="customComponent.location.latitude" name="latitude" class="form-control" [readonly]="!modify" [disabled]="!modify"></ion-input>
         </ion-item>
 
-        <ion-button (click)="submit()" [disabled]="!componentForm.form.valid" class="btn btn-default" [hidden]="!modify">
-            Click me
+        <h1>Sensors</h1>
+        <ion-list>
+            <ion-item *ngFor="let sensor of customComponent.sensors">
+                <ion-item>
+                    <ion-label position="floating">Identificador</ion-label>
+                    <ion-input type="text" required [(ngModel)]="sensor.id" name="sensor_Id" class="form-control" [readonly]="!modify" [disabled]="!modify"></ion-input>
+                </ion-item>
+
+                <ion-item>
+                    <ion-label position="floating">Type</ion-label>
+                    <ion-input type="text" inputmode="text" required [(ngModel)]="sensor.type.id" name="sensor_typeName" class="form-control" [readonly]="!modify" [disabled]="!modify"></ion-input>
+                </ion-item>
+
+                <ion-item>
+                    <ion-label position="floating">Description</ion-label>
+                    <ion-input type="text" inputmode="text" required [(ngModel)]="sensor.description" name="sensor_description" class="form-control" [readonly]="!modify" [disabled]="!modify"></ion-input>
+                </ion-item>
+            </ion-item>
+
+
+        </ion-list>
+
+        <ion-list>
+            <ion-item *ngFor="let sensor2 of newSensors" class="multiline">
+                <ion-item>
+                    <ion-label position="floating">Identificador</ion-label>
+                    <ion-input type="text" required [(ngModel)]="sensor2.id" name="sensor_Id" class="form-control" [readonly]="!modify" [disabled]="!modify"></ion-input>
+                </ion-item>
+
+                <ion-item>
+                    <ion-label position="floating">Type</ion-label>
+                    <ion-input type="text" inputmode="text" required [(ngModel)]="senso2r.type.id" name="sensor2_typeName" class="form-control" [readonly]="!modify" [disabled]="!modify"></ion-input>
+                </ion-item>
+
+                <ion-item>
+                    <ion-label position="floating">Description</ion-label>
+                    <ion-input type="text" inputmode="text" required [(ngModel)]="sensor2.description" name="sensor2_description" class="form-control" [readonly]="!modify" [disabled]="!modify"></ion-input>
+                </ion-item>
+
+                <ion-button (click)="removeSensor(sensor2.newId)" class="btn btn-default" [hidden]="!modify">
+                    Remove Sensor
+                </ion-button>
+            </ion-item>
+        </ion-list>
+
+        <ion-button (click)="addSensor()" class="btn btn-default" [hidden]="!modify">
+            Add Sensor
         </ion-button>
+
 
     </form>
 
+    <ion-button (click)="submit()" [disabled]="!componentForm.form.valid" class="btn btn-default" [hidden]="!modify">
+        Submit
+    </ion-button>
+
+    <ion-button (click)="enableModify()" class="btn btn-default" [hidden]="modify">
+        Modify
+    </ion-button>
 </ion-content>

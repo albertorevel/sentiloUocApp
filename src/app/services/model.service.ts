@@ -77,9 +77,24 @@ export class ModelService {
   getMeasurements(sensorId: string, limit: number) {
     // http://<your_api_server.com>/data/<provider_id>/<sensor_id>?<parameter>=<value>
     var providerId = 'uoc@arevelproveidor';
+    var sensor = this.getSensor(sensorId);
 
-    return from(this.nativeHttp.get(`https://api-sentilo.diba.cat/data/${providerId}/${sensorId}?limit=${limit}`,{},this.httpOptions1String));
+    if (typeof sensor !== 'undefined' && sensor != null) {
+      var observable = Observable.create((observer:any) => {
+        this.nativeHttp.get(`https://api-sentilo.diba.cat/data/${providerId}/${sensorId}?limit=${limit}`,{},this.httpOptions1String).then(data => {
+          sensor.measurements = this.parseMeasurements(data);
+          observer.next()
+        });
+      });
+    }
+
+    return observable;
     
+  }
+
+  parseMeasurements (rawData): Array<Measurement> {
+    console.log(rawData);
+    return null;
   }
 
   /**
@@ -106,9 +121,6 @@ export class ModelService {
   findAllElements() {
 
     var observable = Observable.create((observer:any) => {
-        //console.log(this.httpOptions2);
-        //return this.http.get('http://localhost:8100/catalog', this.httpOptions2);
-        //return this.http.get('https://api-sentilo.diba.cat/catalog', this.httpOptions2);
         this.nativeHttp.get('https://api-sentilo.diba.cat/catalog',{}, this.httpOptions1String).then( data => {
             this.parseElements(data);
             observer.next(true);

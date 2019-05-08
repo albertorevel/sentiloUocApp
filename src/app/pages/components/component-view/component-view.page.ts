@@ -3,6 +3,7 @@ import { ToastController } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 import { ModelService } from 'src/app/services/model.service';
 import { CustomComponent } from 'src/app/model/sentilo/customComponent';
+import { Sensor } from 'src/app/model/sentilo/sensor';
 
 @Component({
   selector: 'app-component-view',
@@ -11,8 +12,10 @@ import { CustomComponent } from 'src/app/model/sentilo/customComponent';
 })
 export class ComponentViewPage implements OnInit {
   
-  customComponent:CustomComponent
-  modify:boolean
+  customComponent:CustomComponent;
+  newSensors:Array<Sensor> = new Array<Sensor>();
+  modify:boolean;
+  counter: number = 0;
 
   constructor(
     public toastController: ToastController,
@@ -28,19 +31,35 @@ export class ComponentViewPage implements OnInit {
 
     if (typeof id !== "undefined" && id != null) {
       this.customComponent = this.modelService.getComponent(id);
-      //TODO error
     }
     else {
       id = null
       this.customComponent = new CustomComponent();
       this.modify = true;
     }
+  }
 
-    console.log(this.customComponent);
+  addSensor() {
+    var newSensor: Sensor = new Sensor();
+    newSensor.newId = this.counter++;
+    this.newSensors[newSensor.newId] = newSensor;
+  }
+
+  removeSensor(newId: number) {
+    this.newSensors = this.newSensors.filter(function(value, index, arr){
+
+      return value.newId != newId;
+  
+  });
+  }
+
+  enableModify() {
+    this.modify = true;
   }
 
   async submit() {
 
+    // TODO
     const toast = await this.toastController.create({
       message: `Component [${this.customComponent}] submitted`,
       duration: 2000
