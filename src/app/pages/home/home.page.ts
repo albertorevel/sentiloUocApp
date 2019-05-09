@@ -30,7 +30,7 @@ export class HomePage {
     this.router.navigate([route, id, modify]);
   }
 
-  navigate2(id: string) {
+  navigateToComponent(id: string) {
     this.router.navigate(['component-view',id,false]);
   }
 }

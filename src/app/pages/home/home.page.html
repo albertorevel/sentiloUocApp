@@ -12,7 +12,7 @@
 <main class="scroll-content">
     <ion-spinner [hidden]="loaded"></ion-spinner>
     <ion-list [hidden]="!loaded">
-        <ion-card *ngFor="let component of components" tappable (click)="navigate2(component.id) ">
+        <ion-card *ngFor="let component of components" tappable (click)="navigateToComponent(component.id) ">
             <ion-card-header>
                 <ion-card-title color="primary ">{{component.id}} ({{component.type.id}})</ion-card-title>
                 <ion-text>{{component.description}}</ion-text>
@@ -24,39 +24,11 @@
             </ion-card-header>
 
         </ion-card>
-        <!-- <ion-item *ngFor="let component of components" detail="true" (click)="navigate2(sensor.id)">
-            <ion-label>
-                <ion-text color="primary " class="title ">
-                    <h1>{{sensor.id}}</h1>
-                    <ion-text> ({{sensor.type.id}})</ion-text>
-                </ion-text>
-                <ion-text> {{sensor.description}}</ion-text>
-            </ion-label>
-        </ion-item> -->
     </ion-list>
+
+    <ion-fab vertical="bottom" horizontal="right" slot="fixed">
+        <ion-fab-button>
+            <ion-icon (click)="navigateToComponent('a')" name="add">+</ion-icon>
+        </ion-fab-button>
+    </ion-fab>
 </main>
-
-
-
-<!-- <ion-content>
-    <ion-card tappable (click)="navigate( 'measurement-view',0,true) ">
-        <ion-card-header>
-            <ion-card-title>Tomar medidas</ion-card-title>
-        </ion-card-header>
-    </ion-card>
-    <ion-card tappable (click)="navigate( 'component-list') ">
-        <ion-card-header>
-            <ion-card-title>Ver componentes</ion-card-title>
-        </ion-card-header>
-    </ion-card>
-    <ion-card tappable (click)="navigate( 'component-view',0,true) ">
-        <ion-card-header>
-            <ion-card-title>Crear componente</ion-card-title>
-        </ion-card-header>
-    </ion-card>
-    <ion-card tappable (click)="navigate( 'sensor-view',0,true) ">
-        <ion-card-header>
-            <ion-card-title>Crear sensor</ion-card-title>
-        </ion-card-header>
-    </ion-card>
-</ion-content> -->

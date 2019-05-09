@@ -32,7 +32,8 @@ export class ComponentViewPage implements OnInit {
     if (typeof id !== "undefined" && id != null) {
       this.customComponent = this.modelService.getComponent(id);
     }
-    else {
+
+    if (typeof this.customComponent === "undefined" || this.customComponent == null) {
       id = null
       this.customComponent = new CustomComponent();
       this.modify = true;
