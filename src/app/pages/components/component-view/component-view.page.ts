@@ -15,8 +15,8 @@ export class ComponentViewPage implements OnInit {
   customComponent:CustomComponent;
   newSensors:Array<Sensor> = new Array<Sensor>();
   modify:boolean;
-  counter: number = 0;
-
+  counter:number = 0;
+  
   constructor(
     public toastController: ToastController,
     private route: ActivatedRoute,
@@ -42,7 +42,7 @@ export class ComponentViewPage implements OnInit {
   addSensor() {
     var newSensor: Sensor = new Sensor();
     newSensor.newId = this.counter++;
-    this.newSensors[newSensor.newId] = newSensor;
+    this.newSensors.push(newSensor);
   }
 
   removeSensor(newId: number) {
