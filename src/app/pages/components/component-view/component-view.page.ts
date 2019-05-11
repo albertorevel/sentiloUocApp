@@ -16,6 +16,7 @@ export class ComponentViewPage implements OnInit {
   newSensors:Array<Sensor> = new Array<Sensor>();
   modify:boolean;
   counter:number = 0;
+  creation:boolean = false;
   
   constructor(
     public toastController: ToastController,
@@ -37,6 +38,7 @@ export class ComponentViewPage implements OnInit {
       id = null
       this.customComponent = new CustomComponent();
       this.modify = true;
+      this.creation = true;
     }
   }
 
@@ -58,14 +60,12 @@ export class ComponentViewPage implements OnInit {
     this.modify = true;
   }
 
-  async submit() {
+  async submitComponent() {
 
-    // TODO
-    const toast = await this.toastController.create({
-      message: `Component [${this.customComponent}] submitted`,
-      duration: 2000
-    });
-    toast.present();
+   this.modelService.updateComponent(this.customComponent, this.newSensors).subscribe(data => {
+      //TODO: Loading false
+      this.modify = false;
+   });
   }
 
 }
