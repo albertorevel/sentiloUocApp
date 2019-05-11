@@ -14,7 +14,7 @@ export class ComponentViewPage implements OnInit {
   
   customComponent:CustomComponent;
   newSensors:Array<Sensor> = new Array<Sensor>();
-  modify:boolean;
+  modify:boolean = false;
   counter:number = 0;
   creation:boolean = false;
   
@@ -27,7 +27,6 @@ export class ComponentViewPage implements OnInit {
   ngOnInit() {
 
     // We read parameters and prepare data
-    this.modify = this.route.snapshot.paramMap.get('modify') === "true";
     var id = this.route.snapshot.paramMap.get('component-id');
 
     if (typeof id !== "undefined" && id != null) {
@@ -37,8 +36,9 @@ export class ComponentViewPage implements OnInit {
     if (typeof this.customComponent === "undefined" || this.customComponent == null) {
       id = null
       this.customComponent = new CustomComponent();
-      this.modify = true;
       this.creation = true;
+      this.modify = true;
+      this.addSensor();
     }
   }
 
@@ -62,10 +62,19 @@ export class ComponentViewPage implements OnInit {
 
   async submitComponent() {
 
-   this.modelService.updateComponent(this.customComponent, this.newSensors).subscribe(data => {
-      //TODO: Loading false
-      this.modify = false;
-   });
+    if(this.creation) {
+      this.modelService.addSensors(this.customComponent, this.newSensors).subscribe(data => {
+        this.modify = false;
+        this.creation = false;
+      })
+    }
+    else {
+      this.modelService.updateComponent(this.customComponent, this.newSensors).subscribe(data => {
+          //TODO: Loading false
+          this.modify = false;
+          this.creation = false;
+      });
+    }
   }
 
 }

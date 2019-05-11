@@ -31,6 +31,6 @@ export class HomePage {
   }
 
   navigateToComponent(id: string) {
-    this.router.navigate(['component-view',id,false]);
+    this.router.navigate(['component-view',id]);
   }
 }

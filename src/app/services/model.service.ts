@@ -151,7 +151,7 @@ export class ModelService {
     // var messagePayload = JSON.stringify(objectPayload);
 
     if (sensorsToAdd.length > 0) {
-      this.addSensors(sensorsToAdd, customComponent);
+      this.addSensors(customComponent, sensorsToAdd);
     }
     
     // TODO manage responses
@@ -160,7 +160,7 @@ export class ModelService {
 
 }
 
-addSensors(sensorsToAdd: Array<Sensor>, customComponent: CustomComponent) {
+addSensors(customComponent: CustomComponent, sensorsToAdd: Array<Sensor>) {
 
   var objectPayload = {"sensors":[]};
   var sensorPayload = {};
@@ -169,11 +169,19 @@ addSensors(sensorsToAdd: Array<Sensor>, customComponent: CustomComponent) {
     sensorPayload = {};
 
     sensorPayload['sensor'] = sensor.id;
-    sensorPayload['description'] = sensor.description;
+
+    if (sensor.description.length > 0) {
+      sensorPayload['description'] = sensor.description;
+    }
+
     sensorPayload['type'] = sensor.type.id;
     sensorPayload['component'] = customComponent.id;
     sensorPayload['componentType'] = customComponent.type.id;
-    sensorPayload['componentDesc'] = customComponent.description;
+
+    if (customComponent.description.length > 0) {
+      sensorPayload['componentDesc'] = customComponent.description;
+    }
+    
 
     //TODO unit and datatype
 
@@ -209,8 +217,12 @@ addSensors(sensorsToAdd: Array<Sensor>, customComponent: CustomComponent) {
           
             //SENSOR
             var newSensor = new Sensor();
-            var newLocation = new CustomLocation();
-            newLocation.fillDataString(sensor['location']);
+
+            if (sensor['location']) {
+              var newLocation = new CustomLocation();
+              newLocation.fillDataString(sensor['location']);
+            }
+            
             newSensor.fillData(sensor['sensor'],
               sensor['description'],
               newLocation,

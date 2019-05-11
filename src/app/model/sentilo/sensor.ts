@@ -8,7 +8,7 @@ export class Sensor {
     private _id:string; 
     private _newId: number; // TODO
     
-    private _description:string;
+    private _description:string = '';
     private _location:CustomLocation;
     private _type:SensorType;
     private _unit: string;//TODO
