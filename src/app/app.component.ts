@@ -6,6 +6,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { ModelService } from './services/model.service';
 import { Router } from '@angular/router';
 import { Storage } from '@ionic/storage';
+import { AuthenticationService } from './services/authentication-service.service';
 
 @Component({
   selector: 'app-root',
@@ -36,7 +37,7 @@ export class AppComponent {
     private statusBar: StatusBar,
     private modelService: ModelService,
     public router: Router,
-    private storage: Storage
+    private authenticationService: AuthenticationService
   ) {
     this.initializeApp();
   }
@@ -44,25 +45,26 @@ export class AppComponent {
   initializeApp() {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
-      // this.router.navigate(['home']);
-      // this.splashScreen.hide();
-      // Recupera todos los elementos y desactiva el loading spinner cuando se han recuperado
-      this.modelService.findAllElements().subscribe(result => {
-        if(result) {
+     
+      this.authenticationService.checkLogin().subscribe(logged => {
+
+        if (logged) {
           
-           // Or to get a key/value pair
-          this.storage.get('provider_credentials').then((val) => {
-            if (typeof val === 'undefined' || val == null) {
-              this.router.navigate(['login']);
-            } else {
+          this.modelService.findAllElements().subscribe(result => {
+         
+            
+            if (result) {
               this.router.navigate(['home']);
+            } else {
+              // TODO error
             }
-            this.splashScreen.hide();
+               
           });
-          
+
+        } else {
+          this.router.navigate(['login']);
         }
       });
-      
    });
   }
 }

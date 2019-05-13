@@ -8,6 +8,7 @@ import { SensorType } from '../model/sentilo/sensorType';
 import { Observable, from } from 'rxjs';
 import { HTTP } from '@ionic-native/http/ngx';
 import { Storage } from '@ionic/storage';
+import { AuthenticationService } from './authentication-service.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,22 +19,8 @@ export class ModelService {
   public sensors = {};
   private _customComponentTypes = {};
   private _sensorTypes = {};
-  private providerId = 'uoc@arevelproveidor';
-/*
-  httpOptions1 = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json; charset=UTF-8',
-      'IDENTITTY_KEY': ''
-    })
-  }
+  private httpOptions = {'Content-Type': 'application/json; charset=UTF-8', 'IDENTITY_KEY' : ''};
 
-  httpOptions2 = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json; charset=UTF-8',
-      'IDENTITY_KEY': '81d0e9c5d1b0dcc9ee9a15333774da126744ca3ee80c1254d58375f73d1b4095'
-    })
-  }
-*/
   httpOptions1String = {'Content-Type': 'application/json; charset=UTF-8',
   'IDENTITY_KEY': '8de83e2f39505b22c237b92093c7ed01e671f01b479d6706d7cc68b2b3a82bf2'};
 
@@ -41,15 +28,24 @@ export class ModelService {
   'IDENTITY_KEY': '81d0e9c5d1b0dcc9ee9a15333774da126744ca3ee80c1254d58375f73d1b4095'};
 
 
-  constructor(private nativeHttp:HTTP, private storage: Storage) {
-    this.nativeHttp.setDataSerializer('json');
+  constructor(
+    private nativeHttp:HTTP, 
+    private authenticationService: AuthenticationService
+  ) {
 
-    
-//TODO delete
-    // Or to get a key/value pair
-    this.storage.get('provider_credentials').then((val) => {
-      console.log('Provider is: ', val);
-    });
+    this.nativeHttp.setDataSerializer('json');
+  }
+
+
+  private get headers(): {} {
+    this.httpOptions['IDENTITY_KEY'] = this.authenticationService.providerToken;
+
+    return this.httpOptions;
+  }
+
+// shortcut
+  public get providerName() : string {
+    return this.authenticationService.providerName;
   }
 
   public get sensorTypes(): {} {
@@ -59,38 +55,6 @@ export class ModelService {
   public get customComponentTypes()  {
     return this._customComponentTypes;
   }
-
-  // getMeasurement(id:Number): Measurement {
-      
-  //   console.log('hey1');
-
-  //   var measurement:Measurement = new Measurement();
-  //   var location = new CustomLocation();
-  //   location.fillData(3,3.2);
-
-  //   measurement.fillData("35", new Date(),location);
-
-  //   console.log(measurement);
-
-  //   return measurement;
-  // }
-
-  // getComponent(id:Number): CustomComponent {
-      
-  //   console.log('hey3');
-
-  //   var customComponent:CustomComponent = new CustomComponent();
-  //   var location = new CustomLocation();
-  //   location.fillData(3,3.2);
-
-  //   var type = this.getCustomComponentTypeList()[0];
-
-  //   customComponent.fillData("35", "An example",location,type);
-
-  //   console.log(customComponent);
-
-  //   return customComponent;
-  // } 
 
   /**
    * Returns all the components types retrieved for the provider
@@ -107,12 +71,11 @@ export class ModelService {
   }
 
   getMeasurements(sensorId: string, limit: number) {
-    // http://<your_api_server.com>/data/<provider_id>/<sensor_id>?<parameter>=<value>
     var sensor = this.getSensor(sensorId);
 
     if (typeof sensor !== 'undefined' && sensor != null) {
       var observable = Observable.create((observer:any) => {
-        this.nativeHttp.get(`https://api-sentilo.diba.cat/data/${this.providerId}/${sensorId}?limit=${limit}`,{},this.httpOptions1String).then(data => {
+        this.nativeHttp.get(`https://api-sentilo.diba.cat/data/${this.providerName}/${sensorId}?limit=${limit}`, {}, this.headers).then(data => {
           sensor.measurements = this.parseMeasurements(data);
           observer.next()
         });
@@ -185,10 +148,15 @@ export class ModelService {
     
     // TODO manage responses
 
-    return from(this.nativeHttp.put(`https://api-sentilo.diba.cat/catalog/${this.providerId}`,objectPayload, this.httpOptions1String));
+    return from(this.nativeHttp.put(`https://api-sentilo.diba.cat/catalog/${this.providerName}`,objectPayload, this.headers));
 
 }
 
+/**
+ * 
+ * @param customComponent 
+ * @param sensorsToAdd 
+ */
 addSensors(customComponent: CustomComponent, sensorsToAdd: Array<Sensor>) {
 
   var objectPayload = {"sensors":[]};
@@ -218,13 +186,13 @@ addSensors(customComponent: CustomComponent, sensorsToAdd: Array<Sensor>) {
   }
 
   // var messagePayload: string = JSON.stringify(objectPayload);
-  return from(this.nativeHttp.post(`https://api-sentilo.diba.cat/catalog/${this.providerId}`,objectPayload, this.httpOptions1String));
+  return from(this.nativeHttp.post(`https://api-sentilo.diba.cat/catalog/${this.providerName}`,objectPayload, this.headers));
 }
 
   findAllElements() {
 
     var observable = Observable.create((observer:any) => {
-        this.nativeHttp.get('https://api-sentilo.diba.cat/catalog',{}, this.httpOptions1String).then( data => {
+        this.nativeHttp.get('https://api-sentilo.diba.cat/catalog',{}, this.headers).then( data => {
             this.parseElements(data);
             observer.next(true);
           }

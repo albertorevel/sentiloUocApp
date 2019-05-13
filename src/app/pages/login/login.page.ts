@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Storage } from '@ionic/storage';
 import { Router } from '@angular/router';
+import { AuthenticationService } from 'src/app/services/authentication-service.service';
+import { ModelService } from 'src/app/services/model.service';
 
 @Component({
   selector: 'app-login',
@@ -12,16 +13,19 @@ export class LoginPage implements OnInit {
   private name: string;
   private token: string;
 
-  constructor(private storage: Storage, public router: Router) { }
+  constructor(
+    public router: Router, 
+    private authenticationService: AuthenticationService,
+    private modelService: ModelService
+  ) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
   loginProvider() {
 
-    var provider_credentials = { 'name' : this.name, 'token' : this.token};
-    this.storage.set('provider_credentials', provider_credentials);
-
-    this.router.navigate(['home']);
+    this.authenticationService.login(this.name, this.token);
+    this.modelService.findAllElements().subscribe(result => {
+      this.router.navigate(['home']);
+    });
   }
 }
