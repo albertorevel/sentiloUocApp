@@ -12,20 +12,16 @@ import { Storage } from '@ionic/storage';
 })
 export class HomePage {
 
-  public components: Array<CustomComponent>;
+  public _components: Array<CustomComponent> = undefined;
 
   constructor (public router: Router, private modelService: ModelService, private storage: Storage) {
-    
-    // // Recupera todos los elementos y desactiva el loading spinner cuando se han recuperado
-    // modelService.findAllElements().subscribe(result => {
-    //   if(result) {
-    //     this.components = modelService.getAllComponents();
-    //     this.loaded = true;
-    //   }
-    // });
-
-    this.components = this.modelService.getAllComponents();
+   
   }
+
+  public get components() {
+    return this.modelService.getAllComponents();
+  }
+
 
   navigate(route: string, id: number, modify: boolean) {
     console.log(route+id+modify);

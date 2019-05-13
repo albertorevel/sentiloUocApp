@@ -16,6 +16,8 @@ export class AuthenticationService {
   constructor(private storage: Storage) { }
 
   login(name: string, token: string) {
+    this._providerName = name;
+    this._providerToken = token;
     var provider_credentials = { 'name' : name, 'token' : token};
     this.storage.set('provider_credentials', provider_credentials);
     this._logged = true;

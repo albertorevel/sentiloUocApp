@@ -1,11 +1,9 @@
 import { Component } from '@angular/core';
 
 import { Platform } from '@ionic/angular';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { ModelService } from './services/model.service';
 import { Router } from '@angular/router';
-import { Storage } from '@ionic/storage';
 import { AuthenticationService } from './services/authentication-service.service';
 
 @Component({
@@ -13,27 +11,26 @@ import { AuthenticationService } from './services/authentication-service.service
   templateUrl: 'app.component.html'
 })
 export class AppComponent {
-  public appPages = [
+  public menuOptions = [
     {
-      title: 'Home',
-      url: '/home',
-      icon: 'home'
+      title: 'Create component',
+      action: 'createComponent',
+      icon: 'add'
     },
     {
-      title: 'Change password',
-      url: '/change-password',
-      icon: 'key'
+      title: 'Add measurement',
+      action: 'addMeasurement',
+      icon: 'stats'
     },
     {
       title: 'Log out',
-      url: '/log-out',
+      action: 'logout',
       icon: 'log-out'
     }
   ];
 
   constructor(
     private platform: Platform,
-    private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private modelService: ModelService,
     public router: Router,
@@ -49,7 +46,7 @@ export class AppComponent {
       this.authenticationService.checkLogin().subscribe(logged => {
 
         if (logged) {
-          
+
           this.modelService.findAllElements().subscribe(result => {
          
             
@@ -66,5 +63,32 @@ export class AppComponent {
         }
       });
    });
+  }
+
+  addCustomComponent() {
+    this.router.navigate(['component-view','']);
+  }
+
+  logOut() {
+    this.authenticationService.logout();
+    this.router.navigate(['login']);
+  }
+
+  execute(action: string) {
+    switch (action) {
+      case 'createComponent':
+        this.addCustomComponent();
+        break;
+    
+      case 'addMeasurement':
+        console.log('not implemented')
+        break;
+
+     case 'logout':
+        this.logOut();
+        break;
+      default:
+        break;
+    }
   }
 }
