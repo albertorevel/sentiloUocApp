@@ -13,6 +13,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { CONFIG_TOKEN } from './applicationProperties';
 import { HTTP } from '@ionic-native/http/ngx';
 
+import { IonicStorageModule } from '@ionic/storage';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { HTTP } from '@ionic-native/http/ngx';
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    IonicStorageModule.forRoot()
   ],
   providers: [
     StatusBar,

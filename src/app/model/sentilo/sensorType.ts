@@ -2,10 +2,12 @@ export class SensorType {
 
     private _id: string;
     private _name: string;
+    private _newId: string;
 
     constructor (id: string) {
         this.id = id;
         this.name = '';
+        this.newId = '';
     }
     
     public get id(): string {
@@ -20,6 +22,13 @@ export class SensorType {
     }
     public set name(value: string) {
         this._name = value;
+    }
+
+    public get newId(): string {
+        return this._newId;
+    }
+    public set newId(value: string) {
+        this._newId = value;
     }
     
 }

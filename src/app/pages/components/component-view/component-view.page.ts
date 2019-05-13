@@ -4,6 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { ModelService } from 'src/app/services/model.service';
 import { CustomComponent } from 'src/app/model/sentilo/customComponent';
 import { Sensor } from 'src/app/model/sentilo/sensor';
+import { SensorType } from 'src/app/model/sentilo/sensorType';
+import { CustomComponentType } from 'src/app/model/sentilo/customComponentType';
 
 @Component({
   selector: 'app-component-view',
@@ -17,6 +19,8 @@ export class ComponentViewPage implements OnInit {
   modify:boolean = false;
   counter:number = 0;
   creation:boolean = false;
+  sensorTypes: Array<SensorType> = new Array<SensorType>();
+  customComponentTypes: Array<CustomComponentType> = new Array<CustomComponentType>();
   
   constructor(
     public toastController: ToastController,
@@ -40,6 +44,9 @@ export class ComponentViewPage implements OnInit {
       this.modify = true;
       this.addSensor();
     }
+
+    this.sensorTypes = this.modelService.getAllSensorTypes();
+    this.customComponentTypes = this.modelService.getAllCustomComponentTypes();
   }
 
   addSensor() {
@@ -54,6 +61,14 @@ export class ComponentViewPage implements OnInit {
       return value.newId != newId;
   
   });
+  }
+
+  getCustomComponentType(id: string) {
+    if (id == 'sentiloUcApp_other_c') {
+      return 'Other';
+    } 
+
+    return id;
   }
 
   enableModify() {

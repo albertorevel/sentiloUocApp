@@ -8,6 +8,7 @@ import { SensorType } from '../model/sentilo/sensorType';
 import { SentiloApiService } from './sentilo-api.service';
 import { Observable, from } from 'rxjs';
 import { HTTP } from '@ionic-native/http/ngx';
+import { Storage } from '@ionic/storage';
 
 @Injectable({
   providedIn: 'root'
@@ -16,8 +17,8 @@ export class ModelService {
 
   public components = {};
   public sensors = {};
-  private customComponentTypes = {};
-  private sensorTypes = {};
+  private _customComponentTypes = {};
+  private _sensorTypes = {};
   private providerId = 'uoc@arevelproveidor';
 /*
   httpOptions1 = {
@@ -41,8 +42,23 @@ export class ModelService {
   'IDENTITY_KEY': '81d0e9c5d1b0dcc9ee9a15333774da126744ca3ee80c1254d58375f73d1b4095'};
 
 
-  constructor(private sentiloAPIService: SentiloApiService, private nativeHttp:HTTP) {
+  constructor(private sentiloAPIService: SentiloApiService, private nativeHttp:HTTP, private storage: Storage) {
     this.nativeHttp.setDataSerializer('json');
+
+    
+
+    // Or to get a key/value pair
+    this.storage.get('provider').then((val) => {
+      console.log('Provider is: ', val);
+    });
+  }
+
+  public get sensorTypes(): {} {
+    return this._sensorTypes;
+  }
+
+  public get customComponentTypes()  {
+    return this._customComponentTypes;
   }
 
   // getMeasurement(id:Number): Measurement {
@@ -76,6 +92,20 @@ export class ModelService {
 
   //   return customComponent;
   // } 
+
+  /**
+   * Returns all the components types retrieved for the provider
+   */
+  getAllCustomComponentTypes(): Array<CustomComponentType> {
+    return Object.values(this.customComponentTypes);
+  }
+
+  /**
+   * Returns all the sensor types retrieved for the provider
+   */
+  getAllSensorTypes(): Array<SensorType> {
+    return Object.values(this.sensorTypes);
+  }
 
   getMeasurements(sensorId: string, limit: number) {
     // http://<your_api_server.com>/data/<provider_id>/<sensor_id>?<parameter>=<value>
@@ -170,7 +200,7 @@ addSensors(customComponent: CustomComponent, sensorsToAdd: Array<Sensor>) {
 
     sensorPayload['sensor'] = sensor.id;
 
-    if (sensor.description.length > 0) {
+    if (sensor.description && sensor.description.length > 0) {
       sensorPayload['description'] = sensor.description;
     }
 
@@ -178,7 +208,7 @@ addSensors(customComponent: CustomComponent, sensorsToAdd: Array<Sensor>) {
     sensorPayload['component'] = customComponent.id;
     sensorPayload['componentType'] = customComponent.type.id;
 
-    if (customComponent.description.length > 0) {
+    if (customComponent.description && customComponent.description.length > 0) {
       sensorPayload['componentDesc'] = customComponent.description;
     }
     
@@ -222,7 +252,7 @@ addSensors(customComponent: CustomComponent, sensorsToAdd: Array<Sensor>) {
               var newLocation = new CustomLocation();
               newLocation.fillDataString(sensor['location']);
             }
-            
+
             newSensor.fillData(sensor['sensor'],
               sensor['description'],
               newLocation,
