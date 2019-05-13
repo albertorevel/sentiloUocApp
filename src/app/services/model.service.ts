@@ -5,7 +5,6 @@ import { CustomLocation } from '../model/customLocation';
 import { CustomComponentType } from '../model/sentilo/customComponentType';
 import { CustomComponent } from '../model/sentilo/customComponent';
 import { SensorType } from '../model/sentilo/sensorType';
-import { SentiloApiService } from './sentilo-api.service';
 import { Observable, from } from 'rxjs';
 import { HTTP } from '@ionic-native/http/ngx';
 import { Storage } from '@ionic/storage';
@@ -42,7 +41,7 @@ export class ModelService {
   'IDENTITY_KEY': '81d0e9c5d1b0dcc9ee9a15333774da126744ca3ee80c1254d58375f73d1b4095'};
 
 
-  constructor(private sentiloAPIService: SentiloApiService, private nativeHttp:HTTP, private storage: Storage) {
+  constructor(private nativeHttp:HTTP, private storage: Storage) {
     this.nativeHttp.setDataSerializer('json');
 
     
