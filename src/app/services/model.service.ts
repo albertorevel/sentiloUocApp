@@ -45,9 +45,9 @@ export class ModelService {
     this.nativeHttp.setDataSerializer('json');
 
     
-
+//TODO delete
     // Or to get a key/value pair
-    this.storage.get('provider').then((val) => {
+    this.storage.get('provider_credentials').then((val) => {
       console.log('Provider is: ', val);
     });
   }

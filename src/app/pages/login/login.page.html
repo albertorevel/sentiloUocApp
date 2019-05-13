@@ -1,0 +1,28 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>Login</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+    <form #loginForm="ngForm">
+        <ion-text color="primary">
+            <h1>Introduzca el nombre y token de proveedor para poder continuar </h1>
+        </ion-text>
+        <ion-item>
+            <ion-label position="floating">Provider name</ion-label>
+            <ion-input type="text" inputmode="text" required [(ngModel)]="name" name="name" class="form-control"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="floating">Provider token</ion-label>
+            <ion-input type="text" inputmode="text" required [(ngModel)]="token" name="token" class="form-control"></ion-input>
+        </ion-item>
+    </form>
+
+    <ion-button (click)="loginProvider()" [disabled]="!loginForm.form.valid" class="btn btn-default">
+        Login
+    </ion-button>
+
+</ion-content>
