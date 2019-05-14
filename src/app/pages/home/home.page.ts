@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router} from '@angular/router';
 import { ModelService } from 'src/app/services/model.service';
-import { CustomComponent } from 'src/app/model/sentilo/customComponent';
+import { CustomComponent } from 'src/app/model/customComponent';
 import { Storage } from '@ionic/storage';
 
 

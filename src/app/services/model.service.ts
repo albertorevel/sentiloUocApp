@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Measurement } from 'src/app/model/sentilo/measurement';
-import { Sensor } from '../model/sentilo/sensor';
+import { Measurement } from 'src/app/model/measurement';
+import { Sensor } from '../model/sensor';
 import { CustomLocation } from '../model/customLocation';
-import { CustomComponentType } from '../model/sentilo/customComponentType';
-import { CustomComponent } from '../model/sentilo/customComponent';
-import { SensorType } from '../model/sentilo/sensorType';
+import { CustomComponentType } from '../model/customComponentType';
+import { CustomComponent } from '../model/customComponent';
+import { SensorType } from '../model/sensorType';
 import { Observable, from } from 'rxjs';
 import { HTTP } from '@ionic-native/http/ngx';
 import { Storage } from '@ionic/storage';

@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 import { ModelService } from 'src/app/services/model.service';
-import { CustomComponent } from 'src/app/model/sentilo/customComponent';
-import { Sensor } from 'src/app/model/sentilo/sensor';
-import { SensorType } from 'src/app/model/sentilo/sensorType';
-import { CustomComponentType } from 'src/app/model/sentilo/customComponentType';
+import { CustomComponent } from 'src/app/model/customComponent';
+import { Sensor } from 'src/app/model/sensor';
+import { SensorType } from 'src/app/model/sensorType';
+import { CustomComponentType } from 'src/app/model/customComponentType';
 
 @Component({
   selector: 'app-component-view',
