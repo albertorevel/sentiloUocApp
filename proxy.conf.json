@@ -1,0 +1,8 @@
+{
+    "/catalog": {
+        "target": "https://api-sentilo.diba.cat/catalog",
+        "changeOrigin": true,
+        "secure": false,
+        "logLevel": "debug"
+    }
+}

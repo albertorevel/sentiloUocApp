@@ -1,0 +1,118 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+        <ion-title>Component: {{customComponent.id}}</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <form #componentForm="ngForm">
+        <ion-item [hidden]="customComponent.id && !creation">
+            <ion-label position="floating">Identificador</ion-label>
+            <ion-input type="text" [(ngModel)]="customComponent.id" name="componentId" class="form-control" [readonly]="!creation" [disabled]="!creation"></ion-input>
+        </ion-item>
+
+
+        <ion-item>
+            <ion-label>Type</ion-label>
+            <ion-select value="select" required [(ngModel)]="customComponent.type.id" name="typeName" class="form-control" [disabled]="!modify">
+                <ion-select-option *ngFor="let customComponentType of customComponentTypes" value="{{customComponentType.id}}">{{getCustomComponentType(customComponentType.id)}}</ion-select-option>
+                <ion-select-option value="sentiloUcApp_other_c">Other</ion-select-option>
+            </ion-select>
+        </ion-item>
+
+        <ion-item [hidden]="customComponent.type.id != 'sentiloUcApp_other_c'">
+            <ion-label position="floating">Other type</ion-label>
+            <ion-input type="text" inputmode="text" [required]="customComponent.type.id != 'sentiloUcApp_other_c'" [(ngModel)]="customComponent.type.newID" name="otherTypeName" class="form-control" [readonly]="!modify" [disabled]="!modify"></ion-input>
+        </ion-item>
+
+
+        <ion-item>
+            <ion-label position="floating">Description</ion-label>
+            <ion-input type="text" inputmode="text" [(ngModel)]="customComponent.description" name="description" class="form-control" [readonly]="!modify" [disabled]="!modify"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="floating">Longitude</ion-label>
+            <ion-input type="number" inputmode="number" [(ngModel)]="customComponent.location.longitude" name="longitude" class="form-control" [readonly]="!modify" [disabled]="!modify"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="floating">Latitude</ion-label>
+            <ion-input type="number" inputmode="number" [(ngModel)]="customComponent.location.latitude" name="latitude" class="form-control" [readonly]="!modify" [disabled]="!modify"></ion-input>
+        </ion-item>
+
+        <h1>Sensors</h1>
+        <ion-card *ngFor="let sensor of customComponent.sensors">
+
+            <ion-item>
+                <ion-label position="floating">Identificador</ion-label>
+                <ion-input type="text" required [(ngModel)]="sensor.id" name="sensor_Id-{{sensor.id}}" class="form-control" [readonly]="true" [disabled]="true"></ion-input>
+            </ion-item>
+
+            <ion-item>
+                <ion-label>Type</ion-label>
+                <ion-select value="select" required [(ngModel)]="sensor.type.id" name="sensorTypeName_s" class="form-control" [disabled]="!modify">
+                    <ion-select-option *ngFor="let sensorType of sensorTypes" value="{{sensorType.id}}">{{sensorType.id}}</ion-select-option>
+                    <ion-select-option value="sentiloUcApp_other_s">Other</ion-select-option>
+                </ion-select>
+            </ion-item>
+
+            <ion-item [hidden]="sensor.type.id != 'sentiloUcApp_other_s'">
+                <ion-label position="floating">Other type</ion-label>
+                <ion-input type="text" inputmode="text" [required]="sensor.type.id != 'sentiloUcApp_other_s'" [(ngModel)]="sensor.type.newID" name="otherTypeName_s" class="form-control" [readonly]="!modify" [disabled]="!modify"></ion-input>
+            </ion-item>
+
+            <ion-item>
+                <ion-label position="floating">Description</ion-label>
+                <ion-input type="text" inputmode="text" [(ngModel)]="sensor.description" name="sensor_description-{{sensor.id}}" class="form-control" [readonly]="!modify" [disabled]="!modify"></ion-input>
+            </ion-item>
+
+        </ion-card>
+
+        <ion-card *ngFor="let sensor2 of newSensors" class="multiline">
+            <ion-item>
+                <ion-label position="floating">Identificador</ion-label>
+                <ion-input type="text" required [(ngModel)]="sensor2.id" name="sensor2_Id-{{sensor2.newId}}" class="form-control"></ion-input>
+            </ion-item>
+
+            <ion-item>
+                <ion-label>Type</ion-label>
+                <ion-select value="select" required [(ngModel)]="sensor2.type.id" name="sensor2TypeName_s2" class="form-control" [disabled]="!modify">
+                    <ion-select-option *ngFor="let sensorType2 of sensorTypes" value="{{sensorType2.id}}">{{sensorType2.id}}</ion-select-option>
+                    <ion-select-option value="sentiloUcApp_other_s2">Other</ion-select-option>
+                </ion-select>
+            </ion-item>
+
+            <ion-item [hidden]="sensor2.type.id != 'sentiloUcApp_other_s2'">
+                <ion-label position="floating">Other type</ion-label>
+                <ion-input type="text" inputmode="text" [required]="sensor2.type.id == 'sentiloUcApp_other_s2'" [(ngModel)]="sensor2.type.newID" name="otherTypeName_s2" class="form-control" [readonly]="!modify" [disabled]="!modify"></ion-input>
+            </ion-item>
+
+            <ion-item>
+                <ion-label position="floating">Description</ion-label>
+                <ion-input type="text" inputmode="text" [(ngModel)]="sensor2.description" name="sensor2_description-{{sensor2.newId}}" class="form-control"></ion-input>
+            </ion-item>
+
+            <ion-button (click)="removeSensor(sensor2.newId)" class="btn btn-default" [hidden]="creation && newSensors.length == 1">
+                Remove Sensor
+            </ion-button>
+        </ion-card>
+
+        <ion-button (click)="addSensor()" class="btn btn-default" [hidden]="!modify">
+            Add Sensor
+        </ion-button>
+
+
+    </form>
+
+    <ion-button (click)="submitComponent()" [disabled]="!componentForm.form.valid" class="btn btn-default" [hidden]="!modify">
+        Submit
+    </ion-button>
+
+    <ion-button (click)="enableModify()" class="btn btn-default" [hidden]="modify">
+        Modify
+    </ion-button>
+</ion-content>
