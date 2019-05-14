@@ -3,11 +3,18 @@
         <ion-buttons slot="start">
             <ion-back-button></ion-back-button>
         </ion-buttons>
-        <ion-title>Component: {{customComponent.id}}</ion-title>
+        <ion-title>{{customComponent.id}}</ion-title>
     </ion-toolbar>
 </ion-header>
 
 <ion-content>
+    <ion-button (click)="showMeasurements()" class="btn btn-default" [hidden]="modify">
+        Ver mediciones
+    </ion-button>
+    <ion-button (click)="newMeasurement()" class="btn btn-default" [hidden]="modify">
+        Nueva medición
+    </ion-button>
+    <h1>Información del componente</h1>
     <form #componentForm="ngForm">
         <ion-item [hidden]="customComponent.id && !creation">
             <ion-label position="floating">Identificador</ion-label>
@@ -44,7 +51,7 @@
             <ion-input type="number" inputmode="number" [(ngModel)]="customComponent.location.latitude" name="latitude" class="form-control" [readonly]="!modify" [disabled]="!modify"></ion-input>
         </ion-item>
 
-        <h1>Sensors</h1>
+        <h2>Sensores asociados</h2>
         <ion-card *ngFor="let sensor of customComponent.sensors">
 
             <ion-item>
@@ -109,10 +116,10 @@
     </form>
 
     <ion-button (click)="submitComponent()" [disabled]="!componentForm.form.valid" class="btn btn-default" [hidden]="!modify">
-        Submit
+        Guardar
     </ion-button>
 
     <ion-button (click)="enableModify()" class="btn btn-default" [hidden]="modify">
-        Modify
+        Modificar
     </ion-button>
 </ion-content>

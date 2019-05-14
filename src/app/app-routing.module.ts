@@ -11,7 +11,7 @@ const routes: Routes = [
     path: 'home',
     loadChildren: './pages/home/home.module#HomePageModule'
   },
-  { path: 'component-view/:component-id', loadChildren: './pages/components/component-view/component-view.module#ComponentViewPageModule' },
+  { path: 'component-view/:component-id', loadChildren: './pages/components/component-view.module#ComponentViewPageModule' },
   { path: 'login', loadChildren: './pages/login/login.module#LoginPageModule' }
 ];
 
