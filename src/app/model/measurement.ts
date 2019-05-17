@@ -4,9 +4,14 @@ import { CustomLocation } from './customLocation';
 export class Measurement {
 
     private _value: string;
-    private _date: Date;
+    private _date: string;
     private _location: CustomLocation;
-    
+    private _active: boolean;
+
+    constructor() {
+        this._value = '';
+        this._active = true;
+    }
     public get value(): string {
         return this._value;
     }
@@ -14,10 +19,10 @@ export class Measurement {
         this._value = value;
     }
 
-    public get date(): Date {
+    public get date(): string {
         return this._date;
     }
-    public set date(value: Date) {
+    public set date(value: string) {
         this._date = value;
     }
 
@@ -28,9 +33,16 @@ export class Measurement {
         this._location = value;
     }
 
-    public fillData(value: string, date: Date, location: CustomLocation) {
+    public get active(): boolean {
+        return this._active;
+    }
+    public set active(value: boolean) {
+        this._active = value;
+    }
+    public fillData(value: string, date: string, location: CustomLocation) {
         this.value = value;
         this.date = date;
         this.location = location;
+        this.active = true;
     }
 }

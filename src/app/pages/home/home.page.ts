@@ -23,15 +23,13 @@ export class HomePage {
   }
 
 
-  navigate(route: string, id: number, modify: boolean) {
-    console.log(route+id+modify);
-    this.router.navigate([route, id, modify]);
-  }
+  // navigate(route: string, id: number, modify: boolean) {
+  //   console.log(route+id+modify);
+  //   this.router.navigate([route, id, modify]);
+  // }
 
   navigateToComponent(id: string) {
    
     this.router.navigate(['component-view',id]);
-
-
   }
 }

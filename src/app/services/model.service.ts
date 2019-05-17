@@ -21,21 +21,17 @@ export class ModelService {
   private _sensorTypes = {};
   private httpOptions = {'Content-Type': 'application/json; charset=UTF-8', 'IDENTITY_KEY' : ''};
 
-  httpOptions1String = {'Content-Type': 'application/json; charset=UTF-8',
-  'IDENTITY_KEY': '8de83e2f39505b22c237b92093c7ed01e671f01b479d6706d7cc68b2b3a82bf2'};
-
-  httpOptions2String = {'Content-Type': 'application/json; charset=UTF-8',
-  'IDENTITY_KEY': '81d0e9c5d1b0dcc9ee9a15333774da126744ca3ee80c1254d58375f73d1b4095'};
-
-
   constructor(
-    private nativeHttp:HTTP, 
+    private _nativeHttp:HTTP, 
     private authenticationService: AuthenticationService
   ) {
-
-    this.nativeHttp.setDataSerializer('json');
   }
 
+  private get nativeHttp(): HTTP {
+
+    this._nativeHttp.setDataSerializer('json');
+    return this._nativeHttp;
+  }
 
   private get headers(): {} {
     this.httpOptions['IDENTITY_KEY'] = this.authenticationService.providerToken;
@@ -75,6 +71,7 @@ export class ModelService {
 
     if (typeof sensor !== 'undefined' && sensor != null) {
       var observable = Observable.create((observer:any) => {
+
         this.nativeHttp.get(`https://api-sentilo.diba.cat/data/${this.providerName}/${sensorId}?limit=${limit}`, {}, this.headers).then(data => {
           sensor.measurements = this.parseMeasurements(data);
           observer.next()
@@ -150,44 +147,71 @@ export class ModelService {
 
     return from(this.nativeHttp.put(`https://api-sentilo.diba.cat/catalog/${this.providerName}`,objectPayload, this.headers));
 
-}
-
-/**
- * 
- * @param customComponent 
- * @param sensorsToAdd 
- */
-addSensors(customComponent: CustomComponent, sensorsToAdd: Array<Sensor>) {
-
-  var objectPayload = {"sensors":[]};
-  var sensorPayload = {};
-
-  for( var sensor of sensorsToAdd) {
-    sensorPayload = {};
-
-    sensorPayload['sensor'] = sensor.id;
-
-    if (sensor.description && sensor.description.length > 0) {
-      sensorPayload['description'] = sensor.description;
-    }
-
-    sensorPayload['type'] = sensor.type.id;
-    sensorPayload['component'] = customComponent.id;
-    sensorPayload['componentType'] = customComponent.type.id;
-
-    if (customComponent.description && customComponent.description.length > 0) {
-      sensorPayload['componentDesc'] = customComponent.description;
-    }
-    
-
-    //TODO unit and datatype
-
-    objectPayload.sensors.push(sensorPayload);
   }
 
-  // var messagePayload: string = JSON.stringify(objectPayload);
-  return from(this.nativeHttp.post(`https://api-sentilo.diba.cat/catalog/${this.providerName}`,objectPayload, this.headers));
-}
+  /**
+   * 
+   * @param customComponent 
+   * @param sensorsToAdd 
+   */
+  addSensors(customComponent: CustomComponent, sensorsToAdd: Array<Sensor>) {
+
+    var objectPayload = {"sensors":[]};
+    var sensorPayload = {};
+
+    for( var sensor of sensorsToAdd) {
+      sensorPayload = {};
+
+      sensorPayload['sensor'] = sensor.id;
+
+      if (sensor.description && sensor.description.length > 0) {
+        sensorPayload['description'] = sensor.description;
+      }
+
+      sensorPayload['type'] = sensor.type.id;
+      sensorPayload['component'] = customComponent.id;
+      sensorPayload['componentType'] = customComponent.type.id;
+
+      if (customComponent.description && customComponent.description.length > 0) {
+        sensorPayload['componentDesc'] = customComponent.description;
+      }
+      
+
+      //TODO unit and datatype
+
+      objectPayload.sensors.push(sensorPayload);
+    }
+
+    return from(this.nativeHttp.post(`https://api-sentilo.diba.cat/catalog/${this.providerName}`,objectPayload, this.headers));
+  }
+
+
+  addMeasurements(sensors: Array<Sensor>) {
+    var objectPayload = {'sensors' : []};
+    var sensorPayload = {}
+    var observationPayload = {};
+
+    // Por el momento añadimos uno solo por sensor como máximo
+    sensors.forEach(sensor => {
+      sensorPayload = {};
+      observationPayload = {};
+
+      sensorPayload['sensor'] = sensor.id;
+      sensorPayload['observations'] = [];
+      
+      observationPayload['value'] = sensor.newMeasurement.value;
+
+      if (sensor.newMeasurement.date.length > 0) {
+        observationPayload['timestamp'] = this.parseTimeFromUTC(sensor.newMeasurement.date);
+      }
+      
+      sensorPayload['observations'].push(observationPayload);
+
+      objectPayload.sensors.push(sensorPayload);
+    });
+
+    return from(this.nativeHttp.put(`https://api-sentilo.diba.cat/data/${this.providerName}`,objectPayload, this.headers));
+  }
 
   findAllElements() {
 
@@ -275,4 +299,20 @@ addSensors(customComponent: CustomComponent, sensorsToAdd: Array<Sensor>) {
     
   }
 
+  parseTimeFromUTC(utcDate: string) : string {
+    var parsedDate: string = '';
+    var objectDate = new Date(utcDate);
+    var isoDate = objectDate.toISOString().substr(0,19)
+
+    var splittedDate = isoDate.split('T');
+    if (splittedDate.length == 2) {
+      var splittedDay = splittedDate[0].split('-') ;
+      if (splittedDay.length == 3) {
+        parsedDate = `${splittedDay[2]}/${splittedDay[1]}/${splittedDay[0]}T${splittedDate[1]}`
+      }
+    }
+
+    return parsedDate;
   }
+
+}

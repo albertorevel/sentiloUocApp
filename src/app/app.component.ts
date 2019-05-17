@@ -13,17 +13,17 @@ import { AuthenticationService } from './services/authentication-service.service
 export class AppComponent {
   public menuOptions = [
     {
-      title: 'Create component',
+      title: 'Crear componente',
       action: 'createComponent',
       icon: 'add'
     },
     {
-      title: 'Add measurement',
+      title: 'Añadir medición',
       action: 'addMeasurement',
       icon: 'stats'
     },
     {
-      title: 'Log out',
+      title: 'Cerrar sesión',
       action: 'logout',
       icon: 'log-out'
     }
@@ -69,6 +69,11 @@ export class AppComponent {
     this.router.navigate(['component-view','']);
   }
 
+  addMeasurements() {
+    // this.router.navigate(['measurements-view','', true]);
+    console.log('not implemented');
+  }
+
   logOut() {
     this.authenticationService.logout();
     this.router.navigate(['login']);
@@ -81,7 +86,7 @@ export class AppComponent {
         break;
     
       case 'addMeasurement':
-        console.log('not implemented')
+        this.addMeasurements();
         break;
 
      case 'logout':

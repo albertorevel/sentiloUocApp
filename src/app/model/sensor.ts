@@ -14,12 +14,14 @@ export class Sensor {
     private _unit: string;//TODO
     private _dataType: string; //TODO
     private _customComponent:CustomComponent;
+    private _newMeasurement: Measurement;
     private _measurements: Array<Measurement>;
     
     constructor() {
         this._location = new CustomLocation();
         this._type = new SensorType('');
         this._customComponent = new CustomComponent();
+        this._newMeasurement = new Measurement();
         this._measurements = new Array<Measurement>();
     }
 
@@ -63,6 +65,13 @@ export class Sensor {
     }
     public set customComponent(value: CustomComponent) {
         this._customComponent = value;
+    }
+
+    public get newMeasurement(): Measurement {
+        return this._newMeasurement;
+    }
+    public set newMeasurement(value: Measurement) {
+        this._newMeasurement = value;
     }
 
     public get measurements(): Array<Measurement> {

@@ -9,7 +9,7 @@
             <ion-content>
                 <ion-list>
                     <ion-item>
-                        <ion-label>Welcome you!</ion-label>
+                        <ion-label>Hola {{authenticationService.providerName}}</ion-label>
                     </ion-item>
                     <ion-menu-toggle auto-hide="false" *ngFor="let m of menuOptions">
                         <ion-item (click)="execute(m.action)">

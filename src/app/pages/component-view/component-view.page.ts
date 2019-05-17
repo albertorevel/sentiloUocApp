@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ToastController } from '@ionic/angular';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ModelService } from 'src/app/services/model.service';
 import { CustomComponent } from 'src/app/model/customComponent';
 import { Sensor } from 'src/app/model/sensor';
@@ -23,9 +22,9 @@ export class ComponentViewPage implements OnInit {
   customComponentTypes: Array<CustomComponentType> = new Array<CustomComponentType>();
   
   constructor(
-    public toastController: ToastController,
     private route: ActivatedRoute,
-    private modelService: ModelService
+    private modelService: ModelService,
+    public router: Router
     ) { }
 
   ngOnInit() {
@@ -90,6 +89,14 @@ export class ComponentViewPage implements OnInit {
           this.creation = false;
       });
     }
+  }
+
+  showMeasurements() {
+    this.router.navigate(['measurement-view',this.customComponent.id, false]);
+  }
+
+  addMeasurements() {
+    this.router.navigate(['measurement-view',this.customComponent.id, true]);
   }
 
 }
