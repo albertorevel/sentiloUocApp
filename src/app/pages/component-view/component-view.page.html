@@ -31,7 +31,7 @@
 
         <ion-item [hidden]="customComponent.type.id != 'sentiloUcApp_other_c'">
             <ion-label position="floating">Identificador del tipo</ion-label>
-            <ion-input type="text" inputmode="text" [required]="customComponent.type.id != 'sentiloUcApp_other_c'" [(ngModel)]="customComponent.type.newID" name="otherTypeName" class="form-control" [readonly]="!modify" [disabled]="!modify"></ion-input>
+            <ion-input type="text" inputmode="text" [required]="customComponent.type.id == 'sentiloUcApp_other_c'" [(ngModel)]="customComponent.type.newID" name="otherTypeName" class="form-control" [readonly]="!modify" [disabled]="!modify"></ion-input>
         </ion-item>
 
 
@@ -68,7 +68,7 @@
 
             <ion-item [hidden]="sensor.type.id != 'sentiloUcApp_other_s'">
                 <ion-label position="floating">Identificador del tipo</ion-label>
-                <ion-input type="text" inputmode="text" [required]="sensor.type.id != 'sentiloUcApp_other_s'" [(ngModel)]="sensor.type.newID" name="otherTypeName_s" class="form-control" [readonly]="!modify" [disabled]="!modify"></ion-input>
+                <ion-input type="text" inputmode="text" [required]="sensor.type.id == 'sentiloUcApp_other_s'" [(ngModel)]="sensor.type.newID" name="otherTypeName_s" class="form-control" [readonly]="!modify" [disabled]="!modify"></ion-input>
             </ion-item>
 
             <ion-item>

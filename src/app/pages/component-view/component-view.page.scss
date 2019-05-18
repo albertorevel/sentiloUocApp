@@ -1,3 +1,7 @@
 .multiline>* {
     display: block;
 }
+
+ion-item .i-interactive-disabled {
+    color: red;
+}

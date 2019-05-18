@@ -22,6 +22,10 @@ export class CustomLocation {
         this.latitude = latitude;
     }
 
+    public get locationString(): string {
+        return `${this.latitude} ${this.longitude}`;
+    }
+
     public fillDataString(locationToParse: string) {
         // TODO check errors
         var locations = locationToParse.split(' ');

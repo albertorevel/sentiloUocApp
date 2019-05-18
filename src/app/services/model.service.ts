@@ -139,6 +139,7 @@ export class ModelService {
     componentPayload['component'] = customComponent.id;
     componentPayload['componentDesc'] = customComponent.description;
     componentPayload['componentType'] = customComponent.type.id;
+    componentPayload['location'] = customComponent.location.locationString;
 
     objectPayload.components.push(componentPayload);
 
@@ -149,6 +150,7 @@ export class ModelService {
 
       sensorPayload['sensor'] = sensor.id;
       sensorPayload['description'] = sensor.description;
+      sensorPayload['unit'] = sensor.unit;
       sensorPayload['type'] = sensor.type.id;
 
       //TODO unit and datatype
@@ -191,6 +193,7 @@ export class ModelService {
       sensorPayload['unit'] = sensor.unit;
       sensorPayload['component'] = customComponent.id;
       sensorPayload['componentType'] = customComponent.type.id;
+      sensorPayload['location'] = customComponent.location.locationString;
       
 
       if (customComponent.description && customComponent.description.length > 0) {
