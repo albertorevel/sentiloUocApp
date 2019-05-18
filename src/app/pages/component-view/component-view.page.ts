@@ -92,11 +92,11 @@ export class ComponentViewPage implements OnInit {
   }
 
   showMeasurements() {
-    this.router.navigate(['measurement-view',this.customComponent.id, false]);
+    this.router.navigate(['measurement-view',this.customComponent.id, true]);
   }
 
   addMeasurements() {
-    this.router.navigate(['measurement-view',this.customComponent.id, true]);
+    this.router.navigate(['measurement-view',this.customComponent.id, false]);
   }
 
 }

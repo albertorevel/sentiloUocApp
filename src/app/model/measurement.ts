@@ -7,6 +7,7 @@ export class Measurement {
     private _date: string;
     private _location: CustomLocation;
     private _active: boolean;
+    private _sensor: Sensor;
 
     constructor() {
         this._value = '';
@@ -39,10 +40,12 @@ export class Measurement {
     public set active(value: boolean) {
         this._active = value;
     }
-    public fillData(value: string, date: string, location: CustomLocation) {
-        this.value = value;
-        this.date = date;
-        this.location = location;
-        this.active = true;
+    
+    public get sensor(): Sensor {
+        return this._sensor;
     }
+    public set sensor(value: Sensor) {
+        this._sensor = value;
+    }
+
 }

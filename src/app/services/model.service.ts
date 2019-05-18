@@ -66,26 +66,45 @@ export class ModelService {
     return Object.values(this.sensorTypes);
   }
 
-  getMeasurements(sensorId: string, limit: number) {
-    var sensor = this.getSensor(sensorId);
-
-    if (typeof sensor !== 'undefined' && sensor != null) {
-      var observable = Observable.create((observer:any) => {
-
-        this.nativeHttp.get(`https://api-sentilo.diba.cat/data/${this.providerName}/${sensorId}?limit=${limit}`, {}, this.headers).then(data => {
-          sensor.measurements = this.parseMeasurements(data);
-          observer.next()
-        });
-      });
-    }
-
-    return observable;
+  getComponentMeasurements(customComponent: CustomComponent) {
     
+    var sensorsMap = {};
+    customComponent.sensors.forEach(sensor => {
+      sensorsMap[sensor.id] = sensor;
+    });
+
+    var observable = Observable.create((observer:any) => {
+      this.nativeHttp.get(`https://api-sentilo.diba.cat/data/${this.providerName}?limit=1`, {}, this.headers).then(data => {
+        this.parseSensorsMeasurements(data, sensorsMap);
+        observer.next();
+      });
+    });
+    
+    return observable;
   }
 
-  parseMeasurements (rawData): Array<Measurement> {
-    console.log(rawData);
-    return null;
+  parseSensorsMeasurements (rawData, sensors) {
+    if (rawData && rawData.data && JSON.parse(rawData.data)) {
+      var sensorList = JSON.parse(rawData.data).sensors;
+      sensorList.forEach(element => {
+        
+        var sensor: Sensor = sensors[element.sensor];
+        
+        if (typeof sensor !== 'undefined' && sensor != null && element.observations.length > 0) {
+          var newMeasurement: Measurement = new Measurement();
+          
+          newMeasurement.sensor = sensor;
+          newMeasurement.value = element.observations[0].value;
+          
+          var newDate = new Date(element.observations[0].time);
+          
+          newMeasurement.date = newDate.toISOString();
+
+          sensor.lastMeasurement = newMeasurement;
+        }
+
+      });
+    }
   }
 
   /**
