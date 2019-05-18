@@ -6,6 +6,7 @@ import { Sensor } from 'src/app/model/sensor';
 import { SensorType } from 'src/app/model/sensorType';
 import { CustomComponentType } from 'src/app/model/customComponentType';
 import { LoadingController } from '@ionic/angular';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
   selector: 'app-component-view',
@@ -26,7 +27,8 @@ export class ComponentViewPage implements OnInit {
     private route: ActivatedRoute,
     private modelService: ModelService,
     public router: Router,
-    public loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private appComponent: AppComponent
     ) { }
 
   ngOnInit() {
@@ -57,7 +59,7 @@ export class ComponentViewPage implements OnInit {
   }
 
   removeSensor(newId: number) {
-    this.newSensors = this.newSensors.filter(function(value, index, arr){
+    this.newSensors = this.newSensors.filter(function(value, _index, _arr){
 
       return value.newId != newId;
   
@@ -76,19 +78,30 @@ export class ComponentViewPage implements OnInit {
     this.modify = true;
   }
 
-  async submitComponent() {
+  submitComponent() {
 
     if(this.creation) {
       
       this.loadingCtrl.create({
-        message: 'Cargando'
+        message: 'Enviando'
       }).then(loadingElement => {
         
         loadingElement.present();
         
-        this.modelService.addSensors(this.customComponent, this.newSensors).subscribe(data => {
-          this.modify = false;
-          this.creation = false;
+        this.modelService.addSensors(this.customComponent, this.newSensors).subscribe(_data => {
+          
+          if (_data) {
+            this.submitSuccess();
+            loadingElement.dismiss();
+          }
+          else {
+            this.submitError();
+            loadingElement.dismiss();
+          }
+          
+        },
+        _error => {
+          this.submitError();
           loadingElement.dismiss();
         });
       });
@@ -96,18 +109,45 @@ export class ComponentViewPage implements OnInit {
     else {
 
       this.loadingCtrl.create({
-        message: 'Cargando'
+        message: 'Enviando'
       }).then(loadingElement => {
         
         loadingElement.present();
         
-        this.modelService.updateComponent(this.customComponent, this.newSensors).subscribe(data => {
-            this.modify = false;
-            this.creation = false;
+        this.modelService.updateComponent(this.customComponent, this.newSensors).subscribe(_data => {
+          if (_data) {
+            this.submitSuccess();
             loadingElement.dismiss();
+          }
+          else {
+            this.submitError();
+            loadingElement.dismiss();
+          }
+        },
+        _error => {
+          this.submitError();
+          loadingElement.dismiss();
         });
       });
     }
+  }
+
+  submitSuccess() {
+    this.modify = false;
+    this.creation = false;
+
+    // Introducimos los nuevos sensores en la lista de sensores del componente
+    this.newSensors.forEach(sensor => {
+      this.customComponent.sensors.push(sensor);
+    });
+
+    this.newSensors = new Array<Sensor>();
+
+    
+  }
+
+  submitError() {
+    this.appComponent.showToast('Ha ocurrido un error. Compruebe los datos introducidos y la conexión.');
   }
 
   showMeasurements() {

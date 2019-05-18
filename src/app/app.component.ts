@@ -62,12 +62,7 @@ export class AppComponent {
               if (result) {
                 this.router.navigate(['home'],{ replaceUrl: true });
               } else {
-                this.toastCtrl.create({
-                  message: 'Ha ocurrido un error con el proceso de autenticación. Compruebe los datos introducidos y la conexión y vuélvalo a intentar.',
-                  duration: 7000
-                }).then(toastElement => {
-                  toastElement.present();
-                });
+                this.showToast('Ha ocurrido un error con el proceso de autenticación. Compruebe los datos introducidos y la conexión.');
                 this.router.navigate(['login']);
               }
             });
@@ -112,5 +107,14 @@ export class AppComponent {
       default:
         break;
     }
+  }
+
+  showToast(message: string) {
+    this.toastCtrl.create({
+      message: message,
+      duration: 5000
+    }).then(toastElement => {
+      toastElement.present();
+    });
   }
 }

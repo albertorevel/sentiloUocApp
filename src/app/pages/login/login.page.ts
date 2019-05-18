@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication-service.service';
 import { ModelService } from 'src/app/services/model.service';
-import { LoadingController, ToastController } from '@ionic/angular';
+import { LoadingController } from '@ionic/angular';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +20,7 @@ export class LoginPage implements OnInit {
     private authenticationService: AuthenticationService,
     private modelService: ModelService,
     private loadingCtrl: LoadingController,
-    private toastCtrl: ToastController
+    private appComponent: AppComponent
   ) { }
 
   ngOnInit() { }
@@ -37,12 +38,7 @@ export class LoginPage implements OnInit {
             this.router.navigate(['home'],{ replaceUrl: true });
             
           } else {
-            this.toastCtrl.create({
-              message: 'Ha ocurrido un error con el proceso de autenticación. Compruebe los datos introducidos y la conexión y vuélvalo a intentar.',
-              duration: 7000
-            }).then(toastElement => {
-              toastElement.present();
-            });
+            this.appComponent.showToast('Ha ocurrido un error con el proceso de autenticación. Compruebe los datos introducidos y la conexión.');
           }
           loadingElement.dismiss();
         });

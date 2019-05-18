@@ -12,7 +12,6 @@ export class Sensor {
     private _location:CustomLocation;
     private _type:SensorType;
     private _unit: string; 
-    private _dataType: string; 
     private _customComponent:CustomComponent;
     private _newMeasurement: Measurement;
     private _lastMeasurement: Measurement;
@@ -66,13 +65,6 @@ export class Sensor {
     public set unit(value: string) {
         this._unit = value;
     }
-
-    public get dataType(): string {
-        return this._dataType;
-    }
-    public set dataType(value: string) {
-        this._dataType = value;
-    }
    
     public get customComponent(): CustomComponent {
         return this._customComponent;
@@ -101,6 +93,5 @@ export class Sensor {
         this.location = location;
         this.type = type;
         this.unit = unit;
-        this.dataType = dataType;
     }
 }

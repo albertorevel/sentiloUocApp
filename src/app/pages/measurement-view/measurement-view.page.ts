@@ -47,7 +47,7 @@ export class MeasurementViewPage implements OnInit {
       if (this.showing) {
         
         this.loadingCtrl.create({
-          message: 'Cargando'
+          message: 'Enviando'
         }).then(loadingElement => {
           loadingElement.present();
 
@@ -71,7 +71,7 @@ export class MeasurementViewPage implements OnInit {
   async sendMeasurements() {
    
     this.loadingCtrl.create({
-      message: 'Cargando'
+      message: 'Enviando'
     }).then(loadingElement => {
       loadingElement.present();
       this.modelService.addMeasurements(this.customComponent.sensors.filter((value) => value.newMeasurement && value.newMeasurement.active)).subscribe( data => {
