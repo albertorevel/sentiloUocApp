@@ -8,10 +8,21 @@
 </ion-header>
 
 <ion-content>
-    <div [hidden]="showing">
 
-        <form #measurementForm="ngForm">
+    <div [hidden]="showing">
+        <div [hidden]="customComponent.id.length > 0">
+            <ion-select value="select" required [(ngModel)]="customComponentId" name="customComponentIdSelect" class="form-control" placeholder="Seleccione un componente">
+                <ion-select-option *ngFor="let eachComponent of customComponents" value="{{eachComponent.id}}">{{eachComponent.id}}</ion-select-option>
+            </ion-select>
+            <ion-button (click)="loadElements()" [disabled]="!measurementForm.form.valid" class="btn btn-default">
+                Seleccionar
+            </ion-button>
+        </div>
+
+
+        <form #measurementForm="ngForm" [hidden]="customComponent.id.length == 0">
             <h1>Nueva medición</h1>
+
             <ion-card *ngFor="let sensor of customComponent.sensors" class="multiline">
                 <ion-card-header>
                     <ion-card-title>
@@ -20,24 +31,31 @@
                     </ion-card-title>
                 </ion-card-header>
                 <ion-card-content [hidden]="!sensor.newMeasurement.active">
-                    <ion-item>
-                        <ion-label position="floating">Valor</ion-label>
-                        <ion-input type="text" [required]="sensor.newMeasurement.active" inputmode="text" name="value-{{sensor.id}}" [(ngModel)]="sensor.newMeasurement.value" class="form-control"></ion-input>
-                    </ion-item>
 
                     <ion-item>
                         <ion-label position="floating">Fecha</ion-label>
                         <ion-datetime display-format="YYYY-MM-DD HH:mm" name="date-{{sensor.id}}" [(ngModel)]="sensor.newMeasurement.date"></ion-datetime>
                     </ion-item>
+
+
+                    <ion-item>
+                        <ion-label position="floating">Valor</ion-label>
+                        <ion-input type="text" [required]="sensor.newMeasurement.active" inputmode="text" name="value-{{sensor.id}}" [(ngModel)]="sensor.newMeasurement.value" class="form-control"></ion-input>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label position="floating">Unidad</ion-label>
+                        <ion-datetime display-format="YYYY-MM-DD HH:mm" name="unit-{{sensor.id}}" [(ngModel)]="sensor.newMeasurement.unit" disabled></ion-datetime>
+                    </ion-item>
+
                 </ion-card-content>
             </ion-card>
 
 
+            <ion-button (click)="sendMeasurements()" [disabled]="!measurementForm.form.valid" class="btn btn-default">
+                Guardar
+            </ion-button>
         </form>
 
-        <ion-button (click)="sendMeasurements()" [disabled]="!measurementForm.form.valid" class="btn btn-default">
-            Guardar
-        </ion-button>
     </div>
     <div [hidden]="!showing">
         <h1>Ultimas mediciones</h1>
@@ -49,14 +67,19 @@
             </ion-card-header>
             <ion-card-content>
                 <ion-item>
+                    <ion-label position="floating">Fecha</ion-label>
+                    <ion-datetime display-format="YYYY-MM-DD HH:mm" name="date-{{sensor.id}}" [(ngModel)]="sensor.lastMeasurement.date" disabled></ion-datetime>
+                </ion-item>
+                <ion-item>
+                    <ion-label position="floating">Unidad</ion-label>
+                    <ion-datetime display-format="YYYY-MM-DD HH:mm" name="unit-{{sensor.id}}" [(ngModel)]="sensor.lastMeasurement.unit" disabled></ion-datetime>
+                </ion-item>
+                <ion-item>
                     <ion-label position="floating">Valor</ion-label>
                     <ion-input type="text" inputmode="text" name="value-{{sensor.id}}" [(ngModel)]="sensor.lastMeasurement.value" class="form-control" disabled></ion-input>
                 </ion-item>
 
-                <ion-item>
-                    <ion-label position="floating">Fecha</ion-label>
-                    <ion-datetime display-format="YYYY-MM-DD HH:mm" name="date-{{sensor.id}}" [(ngModel)]="sensor.lastMeasurement.date" disabled></ion-datetime>
-                </ion-item>
+
             </ion-card-content>
         </ion-card>
     </div>

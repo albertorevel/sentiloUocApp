@@ -48,7 +48,7 @@ export class ModelService {
     return this._sensorTypes;
   }
 
-  public get customComponentTypes()  {
+  public get customComponentTypes() {
     return this._customComponentTypes;
   }
 
@@ -188,8 +188,10 @@ export class ModelService {
       }
 
       sensorPayload['type'] = sensor.type.id;
+      sensorPayload['unit'] = sensor.unit;
       sensorPayload['component'] = customComponent.id;
       sensorPayload['componentType'] = customComponent.type.id;
+      
 
       if (customComponent.description && customComponent.description.length > 0) {
         sensorPayload['componentDesc'] = customComponent.description;
@@ -220,7 +222,7 @@ export class ModelService {
       
       observationPayload['value'] = sensor.newMeasurement.value;
 
-      if (sensor.newMeasurement.date.length > 0) {
+      if (typeof sensor.newMeasurement.date !== 'undefined' && sensor.newMeasurement.date != null && sensor.newMeasurement.date.length > 0) {
         observationPayload['timestamp'] = this.parseTimeFromUTC(sensor.newMeasurement.date);
       }
       
@@ -266,7 +268,9 @@ export class ModelService {
             newSensor.fillData(sensor['sensor'],
               sensor['description'],
               newLocation,
-              null);
+              null,
+              sensor['unit'],
+              sensor['dataType']);
     
             this.sensors[sensor.sensor] = newSensor;
             

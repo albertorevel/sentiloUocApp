@@ -14,19 +14,11 @@ export class HomePage {
 
   public _components: Array<CustomComponent> = undefined;
 
-  constructor (public router: Router, private modelService: ModelService, private storage: Storage) {
-   
-  }
+  constructor (public router: Router, private modelService: ModelService, private storage: Storage) { }
 
   public get components() {
     return this.modelService.getAllComponents();
   }
-
-
-  // navigate(route: string, id: number, modify: boolean) {
-  //   console.log(route+id+modify);
-  //   this.router.navigate([route, id, modify]);
-  // }
 
   navigateToComponent(id: string) {
    

@@ -14,45 +14,53 @@ export class MeasurementViewPage implements OnInit {
   customComponent: CustomComponent;
   showing: boolean;
   loading: boolean = true;
+  customComponents: Array<CustomComponent>;
+  customComponentId: string = '';
   
   constructor(
     private route: ActivatedRoute,
     private modelService: ModelService
-  ) {
-
-    
-   }
+  ) { }
 
   ngOnInit() {
 
 
 
      // We read parameters and prepare data
-     var id = this.route.snapshot.paramMap.get('component-id');
+     this.customComponentId = this.route.snapshot.paramMap.get('component-id');
      this.showing = this.route.snapshot.paramMap.get('showing') == 'true';
+     this.customComponents = this.modelService.getAllComponents();
 
-     if (typeof id !== "undefined" && id != null) {
-       this.customComponent = this.modelService.getComponent(id);
-
-       this.modelService.getComponentMeasurements(this.customComponent).subscribe(data => {
-        this.loading = false;
-      });
-     }
- 
-     if (typeof this.customComponent === "undefined" || this.customComponent == null) {
-      id = null
-      this.customComponent = new CustomComponent();
-     }
-
+     this.loadElements();
      
-
-     // TODO error
-
-    
   }
 
+  loadElements() {
+    if (typeof this.customComponentId !== "undefined" && this.customComponentId != null && this.customComponentId.length > 0) {
+      this.customComponent = this.modelService.getComponent(this.customComponentId);
+
+      if (this.showing) {
+        this.modelService.getComponentMeasurements(this.customComponent).subscribe(data => {
+          this.loading = false;
+        });
+      }
+    }
+
+    if (typeof this.customComponent === "undefined" || this.customComponent == null) {
+     this.customComponent = new CustomComponent();
+     this.loading = false;
+     this.showing = false;
+    }
+
+    // TODO error
+  }
   sendMeasurements() {
-    this.modelService.addMeasurements(this.customComponent.sensors.filter((value) => value.newMeasurement && value.newMeasurement.active));
+    this.loading = true;
+  
+    this.modelService.addMeasurements(this.customComponent.sensors.filter((value) => value.newMeasurement && value.newMeasurement.active)).subscribe( data => {
+     this.showing = true;
+     this.loadElements();
+    });
   }
 
 }

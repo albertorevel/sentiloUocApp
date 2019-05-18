@@ -70,8 +70,7 @@ export class AppComponent {
   }
 
   addMeasurements() {
-    // this.router.navigate(['measurements-view','', true]);
-    console.log('not implemented');
+    this.router.navigate(['measurement-view','',false]);
   }
 
   logOut() {

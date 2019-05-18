@@ -6,13 +6,13 @@ import { Measurement } from './measurement';
 export class Sensor {
     
     private _id:string; 
-    private _newId: number; // TODO
+    private _newId: number; 
     
     private _description:string = '';
     private _location:CustomLocation;
     private _type:SensorType;
-    private _unit: string;//TODO
-    private _dataType: string; //TODO
+    private _unit: string; 
+    private _dataType: string; 
     private _customComponent:CustomComponent;
     private _newMeasurement: Measurement;
     private _lastMeasurement: Measurement;
@@ -59,6 +59,20 @@ export class Sensor {
     public set type(value: SensorType) {
         this._type = value;
     }
+
+    public get unit(): string {
+        return this._unit;
+    }
+    public set unit(value: string) {
+        this._unit = value;
+    }
+
+    public get dataType(): string {
+        return this._dataType;
+    }
+    public set dataType(value: string) {
+        this._dataType = value;
+    }
    
     public get customComponent(): CustomComponent {
         return this._customComponent;
@@ -81,10 +95,12 @@ export class Sensor {
         this._lastMeasurement = value;
     }
 
-    public fillData(id:string, description:string, location:CustomLocation, type:SensorType) {
+    public fillData(id:string, description:string, location:CustomLocation, type:SensorType, unit: string, dataType: string) {
         this.id = id;
         this.description = description;
         this.location = location;
         this.type = type;
+        this.unit = unit;
+        this.dataType = dataType;
     }
 }
