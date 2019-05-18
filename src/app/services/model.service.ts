@@ -7,7 +7,6 @@ import { CustomComponent } from '../model/customComponent';
 import { SensorType } from '../model/sensorType';
 import { Observable, from } from 'rxjs';
 import { HTTP } from '@ionic-native/http/ngx';
-import { Storage } from '@ionic/storage';
 import { AuthenticationService } from './authentication-service.service';
 
 @Injectable({
@@ -25,7 +24,7 @@ export class ModelService {
     private _nativeHttp:HTTP, 
     private authenticationService: AuthenticationService
   ) {
-  }
+  }            
 
   private get nativeHttp(): HTTP {
 
@@ -243,6 +242,9 @@ export class ModelService {
         this.nativeHttp.get('https://api-sentilo.diba.cat/catalog',{}, this.headers).then( data => {
             this.parseElements(data);
             observer.next(true);
+          },
+          error => {
+            observer.next(false);
           }
         )
     });

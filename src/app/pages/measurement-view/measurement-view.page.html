@@ -37,15 +37,16 @@
                         <ion-datetime display-format="YYYY-MM-DD HH:mm" name="date-{{sensor.id}}" [(ngModel)]="sensor.newMeasurement.date"></ion-datetime>
                     </ion-item>
 
+                    <ion-item>
+                        <ion-label position="floating">Unidad</ion-label>
+                        <ion-input name="unit-{{sensor.id}}" [(ngModel)]="sensor.unit" disabled></ion-input>
+                    </ion-item>
 
                     <ion-item>
                         <ion-label position="floating">Valor</ion-label>
                         <ion-input type="text" [required]="sensor.newMeasurement.active" inputmode="text" name="value-{{sensor.id}}" [(ngModel)]="sensor.newMeasurement.value" class="form-control"></ion-input>
                     </ion-item>
-                    <ion-item>
-                        <ion-label position="floating">Unidad</ion-label>
-                        <ion-datetime display-format="YYYY-MM-DD HH:mm" name="unit-{{sensor.id}}" [(ngModel)]="sensor.unit" disabled></ion-datetime>
-                    </ion-item>
+
 
                 </ion-card-content>
             </ion-card>
@@ -72,7 +73,7 @@
                 </ion-item>
                 <ion-item>
                     <ion-label position="floating">Unidad</ion-label>
-                    <ion-datetime display-format="YYYY-MM-DD HH:mm" name="unit-{{sensor.id}}" [(ngModel)]="sensor.unit" disabled></ion-datetime>
+                    <ion-input name="unit-{{sensor.id}}" [(ngModel)]="sensor.unit" disabled></ion-input>
                 </ion-item>
                 <ion-item>
                     <ion-label position="floating">Valor</ion-label>

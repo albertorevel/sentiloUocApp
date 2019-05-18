@@ -5,6 +5,7 @@ import { CustomComponent } from 'src/app/model/customComponent';
 import { Sensor } from 'src/app/model/sensor';
 import { SensorType } from 'src/app/model/sensorType';
 import { CustomComponentType } from 'src/app/model/customComponentType';
+import { LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-component-view',
@@ -24,7 +25,8 @@ export class ComponentViewPage implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private modelService: ModelService,
-    public router: Router
+    public router: Router,
+    public loadingCtrl: LoadingController
     ) { }
 
   ngOnInit() {
@@ -77,16 +79,33 @@ export class ComponentViewPage implements OnInit {
   async submitComponent() {
 
     if(this.creation) {
-      this.modelService.addSensors(this.customComponent, this.newSensors).subscribe(data => {
-        this.modify = false;
-        this.creation = false;
-      })
-    }
-    else {
-      this.modelService.updateComponent(this.customComponent, this.newSensors).subscribe(data => {
-          //TODO: Loading false
+      
+      this.loadingCtrl.create({
+        message: 'Cargando'
+      }).then(loadingElement => {
+        
+        loadingElement.present();
+        
+        this.modelService.addSensors(this.customComponent, this.newSensors).subscribe(data => {
           this.modify = false;
           this.creation = false;
+          loadingElement.dismiss();
+        });
+      });
+    }
+    else {
+
+      this.loadingCtrl.create({
+        message: 'Cargando'
+      }).then(loadingElement => {
+        
+        loadingElement.present();
+        
+        this.modelService.updateComponent(this.customComponent, this.newSensors).subscribe(data => {
+            this.modify = false;
+            this.creation = false;
+            loadingElement.dismiss();
+        });
       });
     }
   }

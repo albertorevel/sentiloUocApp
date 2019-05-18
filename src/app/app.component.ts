@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { Platform } from '@ionic/angular';
+import { Platform, LoadingController, ToastController } from '@ionic/angular';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { ModelService } from './services/model.service';
 import { Router } from '@angular/router';
@@ -34,39 +34,57 @@ export class AppComponent {
     private statusBar: StatusBar,
     private modelService: ModelService,
     public router: Router,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private loadingCtrl: LoadingController,
+    private toastCtrl: ToastController
   ) {
     this.initializeApp();
   }
 
   initializeApp() {
     this.platform.ready().then(() => {
+
+     
       this.statusBar.styleDefault();
      
       this.authenticationService.checkLogin().subscribe(logged => {
+        this.loadingCtrl.create({
+          message: 'Cargando'
+        }).then(loadingElement => {
+          
+          loadingElement.present();
 
-        if (logged) {
+          if (logged) {
 
-          this.modelService.findAllElements().subscribe(result => {
-         
-            
-            if (result) {
-              this.router.navigate(['home']);
-            } else {
-              // TODO error
-            }
-               
-          });
+            this.modelService.findAllElements().subscribe(result => {
+          
+             
+              if (result) {
+                this.router.navigate(['home'],{ replaceUrl: true });
+              } else {
+                this.toastCtrl.create({
+                  message: 'Ha ocurrido un error con el proceso de autenticación. Compruebe los datos introducidos y la conexión y vuélvalo a intentar.',
+                  duration: 7000
+                }).then(toastElement => {
+                  toastElement.present();
+                });
+                this.router.navigate(['login']);
+              }
+            });
 
-        } else {
-          this.router.navigate(['login']);
-        }
+          } else {
+            this.router.navigate(['login']);
+          }
+
+          loadingElement.dismiss();
+        });
       });
    });
   }
 
   addCustomComponent() {
     this.router.navigate(['component-view','']);
+    
   }
 
   addMeasurements() {
@@ -75,7 +93,7 @@ export class AppComponent {
 
   logOut() {
     this.authenticationService.logout();
-    this.router.navigate(['login']);
+    this.router.navigate(['login'],{ replaceUrl: true });
   }
 
   execute(action: string) {
