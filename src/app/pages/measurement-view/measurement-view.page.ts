@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CustomComponent } from 'src/app/model/customComponent';
 import { ModelService } from 'src/app/services/model.service';
 import { LoadingController } from '@ionic/angular';
+import { AppComponent } from 'src/app/app.component';
 
 
 @Component({
@@ -20,15 +21,14 @@ export class MeasurementViewPage implements OnInit {
   
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private modelService: ModelService,
-    public loadingCtrl: LoadingController
+    public loadingCtrl: LoadingController,
+    private appComponent: AppComponent
   ) {
    }
 
   ngOnInit() {
-
-
-
      // We read parameters and prepare data
      this.customComponentId = this.route.snapshot.paramMap.get('component-id');
      this.showing = this.route.snapshot.paramMap.get('showing') == 'true';
@@ -47,11 +47,15 @@ export class MeasurementViewPage implements OnInit {
       if (this.showing) {
         
         this.loadingCtrl.create({
-          message: 'Enviando'
+          message: 'Cargando'
         }).then(loadingElement => {
           loadingElement.present();
 
-          this.modelService.getComponentMeasurements(this.customComponent).subscribe(data => {
+          this.modelService.getComponentMeasurements(this.customComponent).subscribe(result => {
+            if (!result) {
+              this.appComponent.showToast('Ha ocurrido un error recuperando los datos. Compruebe los datos introducidos y la conexión.');
+              this.router.navigate(['home'],{ replaceUrl: true });
+            } 
             loadingElement.dismiss();
           });
         });
@@ -61,12 +65,15 @@ export class MeasurementViewPage implements OnInit {
     }
 
     if (typeof this.customComponent === "undefined" || this.customComponent == null) {
-     this.customComponent = new CustomComponent();
-    //  this.hideLoading();
-     this.showing = false;
+     
+      if (this.showing) {
+        // Ha ocurrido un error en la obtención de todos los datos
+        this.appComponent.showToast('Ha ocurrido un error recuperando los datos. Compruebe la conexión.');
+        this.router.navigate(['home'],{ replaceUrl: true });
+      } else { 
+        this.customComponent = new CustomComponent();
+      }
     }
-
-    // TODO error
   }
   async sendMeasurements() {
    
@@ -77,6 +84,10 @@ export class MeasurementViewPage implements OnInit {
       this.modelService.addMeasurements(this.customComponent.sensors.filter((value) => value.newMeasurement && value.newMeasurement.active)).subscribe( data => {
         this.showing = true;
         this.loadElements();
+        loadingElement.dismiss();
+      },
+      _error => {
+        this.appComponent.showToast('Ha ocurrido un error enviando los datos. Compruebe los datos introducidos y la conexión.');
         loadingElement.dismiss();
       });
     });

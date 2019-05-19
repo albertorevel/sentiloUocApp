@@ -141,8 +141,6 @@ export class ModelService {
         return from(new Promise(resolve => resolve(_error)));
       });
     }
-    
-    // TODO manage responses
 
     return from(new Promise(resolve => resolve(false)));
 
@@ -177,10 +175,7 @@ export class ModelService {
       if (customComponent.description && customComponent.description.length > 0) {
         sensorPayload['componentDesc'] = customComponent.description;
       }
-      
-
-      //TODO unit and datatype
-
+    
       objectPayload.sensors.push(sensorPayload);
     }
 
@@ -197,7 +192,10 @@ export class ModelService {
     var observable = Observable.create((observer:any) => {
       this.nativeHttp.get(`https://api-sentilo.diba.cat/data/${this.providerName}?limit=1`, {}, this.headers).then(data => {
         this.parseSensorsMeasurements(data, sensorsMap);
-        observer.next();
+        observer.next(true);
+      },
+      _error => {
+        observer.next(false);
       });
     });
     
@@ -230,7 +228,7 @@ export class ModelService {
     });
 
     return from(this.nativeHttp.put(`https://api-sentilo.diba.cat/data/${this.providerName}`,objectPayload, this.headers));
-  }
+  }//TODO error
 
   // PARSERS
 
@@ -308,6 +306,7 @@ export class ModelService {
       }
     
     }
+
     return result;
     
   }

@@ -63,12 +63,12 @@ export class AppComponent {
                 this.router.navigate(['home'],{ replaceUrl: true });
               } else {
                 this.showToast('Ha ocurrido un error con el proceso de autenticación. Compruebe los datos introducidos y la conexión.');
-                this.router.navigate(['login']);
+                this.router.navigate(['login'],{ replaceUrl: true });
               }
             });
 
           } else {
-            this.router.navigate(['login']);
+            this.router.navigate(['login'],{ replaceUrl: true });
           }
 
           loadingElement.dismiss();
