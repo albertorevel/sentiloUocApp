@@ -75,7 +75,7 @@ export class MeasurementViewPage implements OnInit {
       }
     }
   }
-  async sendMeasurements() {
+  sendMeasurements() {
    
     this.loadingCtrl.create({
       message: 'Enviando'
@@ -85,6 +85,7 @@ export class MeasurementViewPage implements OnInit {
         this.showing = true;
         this.loadElements();
         loadingElement.dismiss();
+        this.appComponent.showToast('Datos añadidos correctamente.');
       },
       _error => {
         this.appComponent.showToast('Ha ocurrido un error enviando los datos. Compruebe los datos introducidos y la conexión.');

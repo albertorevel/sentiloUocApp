@@ -126,6 +126,8 @@ export class ComponentViewPage implements OnInit {
 
   submitSuccess() {
 
+    this.appComponent.showToast('Datos añadidos correctamente.');
+
     // Añadimos el nuevo componente a la lista
     if (this.creation) {
       this.modelService.components[this.customComponent.id] = this.customComponent;
