@@ -11,6 +11,8 @@ export class Sensor {
     private _description:string = '';
     private _location:CustomLocation;
     private _type:SensorType;
+    private _newType: SensorType = new SensorType('');
+    private _hasNewType: boolean = false;
     private _unit: string; 
     private _customComponent:CustomComponent;
     private _newMeasurement: Measurement;
@@ -59,6 +61,24 @@ export class Sensor {
         this._type = value;
     }
 
+    public get newType(): SensorType {
+        return this._newType;
+    }
+    public set newType(value: SensorType) {
+        this._newType = value;
+    }
+
+    public get hasNewType(): boolean {
+        return this._hasNewType;
+    }
+    public set hasNewType(value: boolean) {
+        this._hasNewType = value;
+    }
+    
+    public get correctType () : SensorType {
+        return this.hasNewType ? this.newType : this.type;
+    }
+
     public get unit(): string {
         return this._unit;
     }
@@ -93,5 +113,11 @@ export class Sensor {
         this.location = location;
         this.type = type;
         this.unit = unit;
+    }
+
+    public updateNewType() {
+      this.type = this.newType;
+      this.newType = new SensorType('');
+      this.hasNewType = false;
     }
 }

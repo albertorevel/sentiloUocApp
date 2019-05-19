@@ -23,7 +23,7 @@ export class CustomLocation {
     }
 
     public get locationString(): string {
-        return `${this.latitude} ${this.longitude}`;
+        return this.latitude && this.longitude ? `${this.latitude} ${this.longitude}` : '';
     }
 
     public fillDataString(locationToParse: string) {

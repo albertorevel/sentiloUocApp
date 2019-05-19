@@ -115,8 +115,12 @@ export class ModelService {
     var componentPayload = {};
     componentPayload['component'] = customComponent.id;
     componentPayload['componentDesc'] = customComponent.description;
-    componentPayload['componentType'] = customComponent.type.id;
-    componentPayload['location'] = customComponent.location.locationString;
+    componentPayload['componentType'] = customComponent.correctType.id;
+
+    var location = customComponent.location.locationString;
+    if (location.length > 0) {
+      componentPayload['location'] = location;
+    }
 
     objectPayload.components.push(componentPayload);
 
@@ -128,7 +132,7 @@ export class ModelService {
       sensorPayload['sensor'] = sensor.id;
       sensorPayload['description'] = sensor.description;
       sensorPayload['unit'] = sensor.unit;
-      sensorPayload['type'] = sensor.type.id;
+      sensorPayload['type'] = sensor.correctType.id;
       
       objectPayload.sensors.push(sensorPayload);
     }
@@ -142,7 +146,7 @@ export class ModelService {
       });
     }
 
-    return from(new Promise(resolve => resolve(false)));
+    return from(this.nativeHttp.put(`https://api-sentilo.diba.cat/catalog/${this.providerName}`,objectPayload, this.headers));
 
   }
 
@@ -165,11 +169,15 @@ export class ModelService {
         sensorPayload['description'] = sensor.description;
       }
 
-      sensorPayload['type'] = sensor.type.id;
+      sensorPayload['type'] = sensor.correctType.id;
       sensorPayload['unit'] = sensor.unit;
       sensorPayload['component'] = customComponent.id;
-      sensorPayload['componentType'] = customComponent.type.id;
-      sensorPayload['location'] = customComponent.location.locationString;
+      sensorPayload['componentType'] = customComponent.correctType.id;
+      
+      var location = customComponent.location.locationString;
+      if (location.length > 0) {
+        sensorPayload['location'] = location;
+      }
       
 
       if (customComponent.description && customComponent.description.length > 0) {

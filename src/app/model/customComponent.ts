@@ -8,6 +8,8 @@ export class CustomComponent {
     private _description: string = '';   
     private _location: CustomLocation = new CustomLocation();
     private _type: CustomComponentType = new CustomComponentType('');
+    private _newType: CustomComponentType = new CustomComponentType('');
+    private _hasNewType: boolean = false;
     private _sensors: Array<Sensor> = new Array();
 
     constructor() { }
@@ -47,10 +49,34 @@ export class CustomComponent {
         this._type = value;
     }
 
+    public get newType(): CustomComponentType {
+        return this._newType;
+    }
+    public set newType(value: CustomComponentType) {
+        this._newType = value;
+    }
+
+    public get hasNewType(): boolean {
+        return this._hasNewType;
+    }
+    public set hasNewType(value: boolean) {
+        this._hasNewType = value;
+    }
+    
+    public get correctType () : CustomComponentType {
+        return this.hasNewType ? this.newType : this.type;
+    }
+
     public fillData(id: string, description:string, location:CustomLocation, type:CustomComponentType) {
         this.id = id;
         this.description = description;
         this.location = location;
         this.type = type;
+    }
+
+    public updateNewType() {
+      this.type = this.newType;
+      this.newType = new CustomComponentType('');
+      this.hasNewType = false;
     }
 }

@@ -66,14 +66,6 @@ export class ComponentViewPage implements OnInit {
   });
   }
 
-  getCustomComponentType(id: string) {
-    if (id == 'sentiloUcApp_other_c') {
-      return 'Other';
-    } 
-
-    return id;
-  }
-
   enableModify() {
     this.modify = true;
   }
@@ -133,8 +125,14 @@ export class ComponentViewPage implements OnInit {
   }
 
   submitSuccess() {
+
+    // Añadimos el nuevo componente a la lista
+    if (this.creation) {
+      this.modelService.components[this.customComponent.id] = this.customComponent;
+      this.creation = false;
+    }
+
     this.modify = false;
-    this.creation = false;
 
     // Introducimos los nuevos sensores en la lista de sensores del componente
     this.newSensors.forEach(sensor => {
@@ -143,6 +141,18 @@ export class ComponentViewPage implements OnInit {
 
     this.newSensors = new Array<Sensor>();
 
+    // Añadimos los nuevos tipos
+    if (this.customComponent.hasNewType) {
+      this.modelService.customComponentTypes[this.customComponent.newType.id] = this.customComponent.newType;
+      this.customComponent.updateNewType();
+    }
+
+    this.customComponent.sensors.forEach(sensor => {
+      if (sensor.hasNewType) {
+        this.modelService.sensorTypes[sensor.newType.id] = sensor.newType;
+        sensor.updateNewType();
+      }
+    })
     
   }
 
@@ -158,4 +168,11 @@ export class ComponentViewPage implements OnInit {
     this.router.navigate(['measurement-view',this.customComponent.id, false]);
   }
 
+  
+
+  compareWithFn = (o1, o2) => {
+    return o1 && o2 && o1 == o2;
+  }
+
+  compareWith = this.compareWithFn;
 }
