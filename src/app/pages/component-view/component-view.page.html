@@ -12,11 +12,13 @@
         <ion-row>
             <ion-col>
                 <ion-button expand="block" fill="outline" (click)="showMeasurements()" class="btn btn-default" [hidden]="modify">
+                    <ion-icon name="stats"></ion-icon>
                     Ver mediciones
                 </ion-button>
             </ion-col>
             <ion-col>
                 <ion-button expand="block" fill="outline" (click)="addMeasurements()" class="btn btn-default" [hidden]="modify">
+                    <ion-icon name="add-circle-outline"></ion-icon>
                     Nueva medición
                 </ion-button>
             </ion-col>
@@ -48,17 +50,17 @@
         </ion-item>
 
         <ion-item>
-            <ion-label position="floating ">Descripción</ion-label>
+            <ion-label position="stacked ">Descripción</ion-label>
             <ion-input type="text " inputmode="text " [(ngModel)]="customComponent.description " name="description " class="form-control " [readonly]="!modify " [disabled]="!modify "></ion-input>
         </ion-item>
 
         <ion-item>
-            <ion-label position="floating ">Longitud</ion-label>
+            <ion-label position="floating">Longitud</ion-label>
             <ion-input type="number " inputmode="number " [(ngModel)]="customComponent.location.longitude " name="longitude " class="form-control " [readonly]="!modify " [disabled]="!modify "></ion-input>
         </ion-item>
 
         <ion-item>
-            <ion-label position="floating ">Latitud</ion-label>
+            <ion-label>Latitud</ion-label>
             <ion-input type="number " inputmode="number " [(ngModel)]="customComponent.location.latitude " name="latitude " class="form-control " [readonly]="!modify " [disabled]="!modify "></ion-input>
         </ion-item>
 
@@ -140,18 +142,23 @@
             </ion-card-content>
         </ion-card>
 
-        <ion-button (click)="addSensor() " class="btn btn-default " [hidden]="!modify ">
+        <ion-button (click)="addSensor() " class="btn btn-default bottom-right-button" fill="outline" fill="outline" [hidden]="!modify ">
+            <ion-icon name="add-circle-outline"></ion-icon>
             Añadir sensor
         </ion-button>
 
 
     </form>
 
+
+
     <ion-button expand="block" fill="outline" (click)="submitComponent() " [disabled]="!componentForm.form.valid " class="btn btn-default bottom-button" [hidden]="!modify ">
+        <ion-icon slot="start" name="save"></ion-icon>
         Guardar
     </ion-button>
 
     <ion-button expand="block" fill="outline" (click)="enableModify() " class="btn btn-default bottom-button" [hidden]="modify ">
+        <ion-icon slot="start" name="create"></ion-icon>
         Modificar
     </ion-button>
 </ion-content>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModelService } from 'src/app/services/model.service';
 import { CustomComponent } from 'src/app/model/customComponent';
@@ -13,8 +13,7 @@ import { AppComponent } from 'src/app/app.component';
   templateUrl: './component-view.page.html',
   styleUrls: ['./component-view.page.scss'],
 })
-export class ComponentViewPage implements OnInit {
-  
+export class ComponentViewPage implements OnInit {  
   customComponent:CustomComponent;
   newSensors:Array<Sensor> = new Array<Sensor>();
   modify:boolean = false;
@@ -169,12 +168,4 @@ export class ComponentViewPage implements OnInit {
   addMeasurements() {
     this.router.navigate(['measurement-view',this.customComponent.id, false]);
   }
-
-  
-
-  compareWithFn = (o1, o2) => {
-    return o1 && o2 && o1 == o2;
-  }
-
-  compareWith = this.compareWithFn;
 }
