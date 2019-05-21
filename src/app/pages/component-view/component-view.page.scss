@@ -5,3 +5,10 @@
 ion-item .i-interactive-disabled {
     color: red;
 }
+
+#component-buttons {
+    margin: 10px 0px;
+    ion-button {
+        height: 5em;
+    }
+}

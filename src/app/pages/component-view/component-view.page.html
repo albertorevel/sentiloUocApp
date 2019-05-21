@@ -8,12 +8,21 @@
 </ion-header>
 
 <ion-content>
-    <ion-button (click)="showMeasurements()" class="btn btn-default" [hidden]="modify">
-        Ver mediciones
-    </ion-button>
-    <ion-button (click)="addMeasurements()" class="btn btn-default" [hidden]="modify">
-        Nueva medición
-    </ion-button>
+    <ion-grid id="component-buttons">
+        <ion-row>
+            <ion-col>
+                <ion-button expand="block" fill="outline" (click)="showMeasurements()" class="btn btn-default" [hidden]="modify">
+                    Ver mediciones
+                </ion-button>
+            </ion-col>
+            <ion-col>
+                <ion-button expand="block" fill="outline" (click)="addMeasurements()" class="btn btn-default" [hidden]="modify">
+                    Nueva medición
+                </ion-button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
     <h1>Información del componente</h1>
     <form #componentForm="ngForm">
         <ion-item [hidden]="customComponent.id && !creation">
@@ -142,7 +151,7 @@
         Guardar
     </ion-button>
 
-    <ion-button (click)="enableModify() " class="btn btn-default " [hidden]="modify ">
+    <ion-button expand="block" fill="outline" (click)="enableModify() " class="btn btn-default " [hidden]="modify ">
         Modificar
     </ion-button>
 </ion-content>
