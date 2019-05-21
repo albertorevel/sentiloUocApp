@@ -8,7 +8,7 @@
 </ion-header>
 
 <ion-content>
-    <ion-grid id="component-buttons">
+    <ion-grid id="component-buttons" [hidden]="modify">
         <ion-row>
             <ion-col>
                 <ion-button expand="block" fill="outline" (click)="showMeasurements()" class="btn btn-default" [hidden]="modify">
@@ -147,11 +147,11 @@
 
     </form>
 
-    <ion-button (click)="submitComponent() " [disabled]="!componentForm.form.valid " class="btn btn-default " [hidden]="!modify ">
+    <ion-button expand="block" fill="outline" (click)="submitComponent() " [disabled]="!componentForm.form.valid " class="btn btn-default bottom-button" [hidden]="!modify ">
         Guardar
     </ion-button>
 
-    <ion-button expand="block" fill="outline" (click)="enableModify() " class="btn btn-default " [hidden]="modify ">
+    <ion-button expand="block" fill="outline" (click)="enableModify() " class="btn btn-default bottom-button" [hidden]="modify ">
         Modificar
     </ion-button>
 </ion-content>
