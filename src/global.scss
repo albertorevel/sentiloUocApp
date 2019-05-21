@@ -9,10 +9,37 @@
 @import '~@ionic/angular/css/text-alignment.css';
 @import '~@ionic/angular/css/text-transformation.css';
 @import '~@ionic/angular/css/flex-utils.css';
+
+/* General */
+
 .scroll-content {
     overflow-y: scroll;
 }
 
 .bold {
     font-weight: bold;
+}
+
+body {
+    font: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+
+/** Toolbar **/
+
+ion-toolbar {
+    --background: var(--ion-color-primary);
+    --color: var(--ion-color-primary-contrast);
+    .toolbar-title {
+        font-size: 1.2em;
+        padding-left: 0.2em;
+    }
+}
+
+ion-icon {
+    color: var(--ion-color-primary);
+}
+
+ion-toolbar ion-menu-toggle {
+    --border-color: var(--ion-color-primary);
 }
