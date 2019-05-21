@@ -66,39 +66,40 @@
 
         <h2>Sensores asociados</h2>
         <ion-card *ngFor="let sensor of customComponent.sensors ">
+            <ion-card-header>
+                <ion-item>
+                    <ion-label position="floating ">Identificador</ion-label>
+                    <ion-input type="text " required [(ngModel)]="sensor.id " name="sensor_Id-{{sensor.id}} " class="form-control " [readonly]="true " [disabled]="true "></ion-input>
+                </ion-item>
+            </ion-card-header>
+            <ion-card-content>
+                <ion-item [hidden]="sensor.hasNewType">
+                    <ion-label>Tipo</ion-label>
+                    <ion-select [required]="!sensor.hasNewType" [(ngModel)]="sensor.type.id" name="sensorTypeName_s" class="form-control" [disabled]="!modify">
+                        <ion-select-option *ngFor="let sensorType of sensorTypes" value="{{sensorType.id}}">{{sensorType.id}}</ion-select-option>
+                    </ion-select>
+                </ion-item>
 
-            <ion-item>
-                <ion-label position="floating ">Identificador</ion-label>
-                <ion-input type="text " required [(ngModel)]="sensor.id " name="sensor_Id-{{sensor.id}} " class="form-control " [readonly]="true " [disabled]="true "></ion-input>
-            </ion-item>
+                <ion-item [hidden]="!sensor.hasNewType || !modify">
+                    <ion-label position="floating ">Otro tipo</ion-label>
+                    <ion-input type="text " inputmode="text " [required]="sensor.hasNewType" [(ngModel)]="sensor.newType.id" name="otherTypeName_s " class="form-control " [disabled]="!modify "></ion-input>
+                </ion-item>
 
-            <ion-item [hidden]="sensor.hasNewType">
-                <ion-label>Tipo</ion-label>
-                <ion-select [required]="!sensor.hasNewType" [(ngModel)]="sensor.type.id" name="sensorTypeName_s" class="form-control" [disabled]="!modify">
-                    <ion-select-option *ngFor="let sensorType of sensorTypes" value="{{sensorType.id}}">{{sensorType.id}}</ion-select-option>
-                </ion-select>
-            </ion-item>
+                <ion-item [hidden]="!modify">
+                    <ion-checkbox [(ngModel)]="sensor.hasNewType" name="hasNewType_s "></ion-checkbox>
+                    <ion-label>El tipo no aparece en la lista</ion-label>
+                </ion-item>
 
-            <ion-item [hidden]="!sensor.hasNewType || !modify">
-                <ion-label position="floating ">Otro tipo</ion-label>
-                <ion-input type="text " inputmode="text " [required]="sensor.hasNewType" [(ngModel)]="sensor.newType.id" name="otherTypeName_s " class="form-control " [disabled]="!modify "></ion-input>
-            </ion-item>
+                <ion-item>
+                    <ion-label position="floating ">Descripción</ion-label>
+                    <ion-input type="text " inputmode="text " [(ngModel)]="sensor.description " name="sensor_description-{{sensor.id}} " class="form-control " [readonly]="!modify " [disabled]="!modify "></ion-input>
+                </ion-item>
 
-            <ion-item [hidden]="!modify">
-                <ion-checkbox [(ngModel)]="sensor.hasNewType" name="hasNewType_s "></ion-checkbox>
-                <ion-label>El tipo no aparece en la lista</ion-label>
-            </ion-item>
-
-            <ion-item>
-                <ion-label position="floating ">Descripción</ion-label>
-                <ion-input type="text " inputmode="text " [(ngModel)]="sensor.description " name="sensor_description-{{sensor.id}} " class="form-control " [readonly]="!modify " [disabled]="!modify "></ion-input>
-            </ion-item>
-
-            <ion-item>
-                <ion-label position="floating ">Unidad</ion-label>
-                <ion-input type="text " inputmode="text " [(ngModel)]="sensor.unit " name="sensor_unit-{{sensor.newId}} " class="form-control " [readonly]="!modify " [disabled]="!modify "></ion-input>
-            </ion-item>
-
+                <ion-item>
+                    <ion-label position="floating ">Unidad</ion-label>
+                    <ion-input type="text " inputmode="text " [(ngModel)]="sensor.unit " name="sensor_unit-{{sensor.newId}} " class="form-control " [readonly]="!modify " [disabled]="!modify "></ion-input>
+                </ion-item>
+            </ion-card-content>
         </ion-card>
 
         <ion-card *ngFor="let sensor2 of newSensors " class="multiline ">

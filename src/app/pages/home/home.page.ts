@@ -2,8 +2,6 @@ import { Component } from '@angular/core';
 import { Router} from '@angular/router';
 import { ModelService } from 'src/app/services/model.service';
 import { CustomComponent } from 'src/app/model/customComponent';
-import { Storage } from '@ionic/storage';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 
 
 @Component({
