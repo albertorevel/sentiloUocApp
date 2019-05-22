@@ -1,4 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModelService } from 'src/app/services/model.service';
 import { CustomComponent } from 'src/app/model/customComponent';
@@ -27,7 +28,8 @@ export class ComponentViewPage implements OnInit {
     private modelService: ModelService,
     public router: Router,
     private loadingCtrl: LoadingController,
-    private appComponent: AppComponent
+    private appComponent: AppComponent,
+    private location: Location
     ) { }
 
   ngOnInit() {
@@ -36,7 +38,7 @@ export class ComponentViewPage implements OnInit {
     var id = this.route.snapshot.paramMap.get('component-id');
 
     if (typeof id !== "undefined" && id != null) {
-      this.customComponent = this.modelService.getComponent(id);
+      this.customComponent = this.modelService.getComponentClone(id);
     }
 
     if (typeof this.customComponent === "undefined" || this.customComponent == null) {
@@ -61,12 +63,21 @@ export class ComponentViewPage implements OnInit {
     this.newSensors = this.newSensors.filter(function(value, _index, _arr){
 
       return value.newId != newId;
-  
   });
   }
 
   enableModify() {
-    this.modify = true;
+    this.modify = true;    
+    this.customComponent = this.modelService.cloneObject(this.customComponent);
+  }
+
+  cancelComponent() {
+    if (!this.creation) {
+      this.modify = false;
+      this.customComponent
+    } else {
+      this.location.back();
+    }
   }
 
   submitComponent() {
@@ -126,12 +137,11 @@ export class ComponentViewPage implements OnInit {
   submitSuccess() {
 
     this.appComponent.showToast('Datos añadidos correctamente.');
+    
+    this.modelService.setComponent(this.customComponent);
 
     // Añadimos el nuevo componente a la lista
-    if (this.creation) {
-      this.modelService.components[this.customComponent.id] = this.customComponent;
-      this.creation = false;
-    }
+    this.creation = false;
 
     this.modify = false;
 

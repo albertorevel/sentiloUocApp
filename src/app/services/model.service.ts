@@ -78,12 +78,26 @@ export class ModelService {
   getComponent(id: string): CustomComponent {
     return this.components[id];
   }
+  
+   /**
+   * Returns a component with an id passed as a parameter
+   */
+  getComponentClone(id: string): CustomComponent {
+    return this.cloneObject(this.components[id]);
+  }
+  
 
   /**
    * Returns a sensor with an id passed as a parameter
    */
   getSensor(id: string): Sensor {
     return this.sensors[id];
+  }
+
+  setComponent(customComponent: CustomComponent) {
+    if (customComponent.id) {
+      this.components[customComponent.id] = customComponent;
+    }
   }
 
   // API CALLS
@@ -357,6 +371,10 @@ export class ModelService {
     }
 
     return parsedDate;
+  }
+
+  cloneObject(obj) {
+    return obj;
   }
 
 }
