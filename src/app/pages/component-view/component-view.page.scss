@@ -2,29 +2,21 @@
     display: block;
 }
 
-ion-item .i-interactive-disabled {
-    color: red;
-}
-
 #component-buttons {
     margin: 10px 0px;
     ion-button {
         height: 5em;
-        ion-icon {
-            --padding-right: 3px;
-        }
     }
 }
 
-.bottom-button {
-    margin: 20px 30px;
-}
-
-.bottom-right-button {
-    float: right;
-    margin: 0 10px 10px;
+.card-button {
+    margin-top: 10px;
 }
 
 form {
     overflow: hidden;
+}
+
+ion-card {
+    border: 1px solid var(--ion-color-primary);
 }

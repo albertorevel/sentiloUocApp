@@ -65,17 +65,15 @@
         </ion-item>
 
         <h2>Sensores asociados</h2>
-        <ion-card *ngFor="let sensor of customComponent.sensors ">
-            <ion-card-header>
-                <ion-item>
-                    <ion-label position="floating ">Identificador</ion-label>
-                    <ion-input type="text " required [(ngModel)]="sensor.id " name="sensor_Id-{{sensor.id}} " class="form-control " [readonly]="true " [disabled]="true "></ion-input>
-                </ion-item>
+        <ion-card *ngFor="let sensor of customComponent.sensors">
+            <ion-card-header color="primary">
+                <ion-card-title>{{sensor.id}}</ion-card-title>
             </ion-card-header>
+
             <ion-card-content>
                 <ion-item [hidden]="sensor.hasNewType">
                     <ion-label>Tipo</ion-label>
-                    <ion-select [required]="!sensor.hasNewType" [(ngModel)]="sensor.type.id" name="sensorTypeName_s" class="form-control" [disabled]="!modify">
+                    <ion-select [required]="!sensor.hasNewType" [(ngModel)]="sensor.type.id" name="sensorTypeName_s-{{sensor.id}}" class="form-control" [disabled]="!modify">
                         <ion-select-option *ngFor="let sensorType of sensorTypes" value="{{sensorType.id}}">{{sensorType.id}}</ion-select-option>
                     </ion-select>
                 </ion-item>
@@ -102,17 +100,20 @@
             </ion-card-content>
         </ion-card>
 
-        <ion-card *ngFor="let sensor2 of newSensors " class="multiline ">
+        <ion-card *ngFor="let sensor2 of newSensors " class="multiline new-sensor">
+            <ion-card-header color="primary">
+                <ion-card-title>Nuevo sensor</ion-card-title>
+            </ion-card-header>
             <ion-card-content>
 
                 <ion-item>
                     <ion-label position="floating ">Identificador</ion-label>
-                    <ion-input type="text " required [(ngModel)]="sensor2.id " name="sensor2_Id-{{sensor2.newId}} " class="form-control "></ion-input>
+                    <ion-input type="text " required [(ngModel)]="sensor2.id" name="sensor2_Id-{{sensor2.newId}} " class="form-control "></ion-input>
                 </ion-item>
 
                 <ion-item [hidden]="sensor2.hasNewType">
                     <ion-label>Tipo</ion-label>
-                    <ion-select [required]="!sensor2.hasNewType" [(ngModel)]="sensor2.type.id" name="sensorTypeName_s2" class="form-control" [disabled]="!modify">
+                    <ion-select [required]="!sensor2.hasNewType" [(ngModel)]="sensor2.type.id" name="sensorTypeName_s2-{{sensor2.id}}" class="form-control" [disabled]="!modify">
                         <ion-select-option *ngFor="let sensorType of sensorTypes" value="{{sensorType.id}}">{{sensorType.id}}</ion-select-option>
                     </ion-select>
                 </ion-item>
@@ -137,26 +138,36 @@
                     <ion-input type="text " inputmode="text " [(ngModel)]="sensor2.unit " name="sensor2_unit-{{sensor2.newId}} " class="form-control "></ion-input>
                 </ion-item>
 
-                <ion-button (click)="removeSensor(sensor2.newId) " class="btn btn-default " [hidden]="creation && newSensors.length==1 ">
+                <ion-button (click)="removeSensor(sensor2.newId) " class="btn btn-default card-button" [hidden]="creation && newSensors.length==1" fill="outline">
+                    <ion-icon name="trash"></ion-icon>
                     Borrar sensor
                 </ion-button>
             </ion-card-content>
         </ion-card>
 
-        <ion-button (click)="addSensor() " class="btn btn-default bottom-right-button" fill="outline" fill="outline" [hidden]="!modify ">
+        <ion-button (click)="addSensor() " class="btn btn-default bottom-button" expand="block" fill="outline" [hidden]="!modify ">
             <ion-icon name="add-circle-outline"></ion-icon>
-            Añadir sensor
+            Nuevo sensor
         </ion-button>
 
+        <ion-grid [hidden]="!modify">
+            <ion-row>
+                <ion-col>
+                    <ion-button expand="block" fill="outline" (click)="submitComponent()" [disabled]="!componentForm.form.valid " class="btn btn-default" color="tertiary">
+                        <ion-icon slot="start" name="save" color="tertiary"></ion-icon>
+                        Guardar
+                    </ion-button>
+                </ion-col>
+                <ion-col>
+                    <ion-button expand="block" fill="outline" (click)="cancelComponent()" class="btn btn-default">
+                        <ion-icon name="close"></ion-icon>
+                        Cancelar
+                    </ion-button>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
 
     </form>
-
-
-
-    <ion-button expand="block" fill="outline" (click)="submitComponent() " [disabled]="!componentForm.form.valid " class="btn btn-default bottom-button" [hidden]="!modify ">
-        <ion-icon slot="start" name="save"></ion-icon>
-        Guardar
-    </ion-button>
 
     <ion-button expand="block" fill="outline" (click)="enableModify() " class="btn btn-default bottom-button" [hidden]="modify ">
         <ion-icon slot="start" name="create"></ion-icon>

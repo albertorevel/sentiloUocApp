@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CustomComponent } from 'src/app/model/customComponent';
 import { ModelService } from 'src/app/services/model.service';
 import { LoadingController } from '@ionic/angular';
 import { AppComponent } from 'src/app/app.component';
+import { Measurement } from 'src/app/model/measurement';
 
 
 @Component({
@@ -15,6 +17,7 @@ export class MeasurementViewPage implements OnInit {
 
   customComponent: CustomComponent;
   showing: boolean;
+  wasShowing: boolean;
   customComponents: Array<CustomComponent>;
   customComponentId: string = '';
   loading: HTMLIonLoadingElement;
@@ -24,17 +27,19 @@ export class MeasurementViewPage implements OnInit {
     private router: Router,
     private modelService: ModelService,
     public loadingCtrl: LoadingController,
-    private appComponent: AppComponent
+    private appComponent: AppComponent,
+    private location: Location
   ) {
    }
 
   ngOnInit() {
-     // We read parameters and prepare data
-     this.customComponentId = this.route.snapshot.paramMap.get('component-id');
-     this.showing = this.route.snapshot.paramMap.get('showing') == 'true';
-     this.customComponents = this.modelService.getAllComponents();
+    // We read parameters and prepare data
+    this.customComponentId = this.route.snapshot.paramMap.get('component-id');
+    this.showing = this.route.snapshot.paramMap.get('showing') == 'true';
+    this.customComponents = this.modelService.getAllComponents();
+    this.wasShowing = this.showing;
 
-     this.loadElements();
+    this.loadElements();
      
   }
 
@@ -92,6 +97,27 @@ export class MeasurementViewPage implements OnInit {
         loadingElement.dismiss();
       });
     });
+  }
+
+  addMeasurement() {
+    this.showing = false;
+  }
+
+  cancelMeasurement() {
+
+    // Eliminamos los cambios
+    if (this.customComponent && this.customComponent.sensors && this.customComponent.sensors.length > 0) {
+      this.customComponent.sensors.forEach(sensor => {
+        sensor.newMeasurement = new Measurement();
+      })
+    }
+
+    // Realizamos la navegación de manera correcta
+    if (this.wasShowing) {
+      this.showing = true;
+    } else {
+      this.location.back();
+    }
   }
 
 }

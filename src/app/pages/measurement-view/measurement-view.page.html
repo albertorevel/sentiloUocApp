@@ -51,10 +51,22 @@
                 </ion-card-content>
             </ion-card>
 
-
-            <ion-button (click)="sendMeasurements()" [disabled]="!measurementForm.form.valid" class="btn btn-default">
-                Guardar
-            </ion-button>
+            <ion-grid>
+                <ion-row>
+                    <ion-col>
+                        <ion-button expand="block" fill="outline" (click)="sendMeasurements()" class="btn btn-default" color="tertiary">
+                            <ion-icon name="save" color="tertiary"></ion-icon>
+                            Guardar
+                        </ion-button>
+                    </ion-col>
+                    <ion-col>
+                        <ion-button expand="block" fill="outline" (click)="cancelMeasurement()" class="btn btn-default">
+                            <ion-icon name="close"></ion-icon>
+                            Cancelar
+                        </ion-button>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
         </form>
 
     </div>
@@ -79,9 +91,12 @@
                     <ion-label position="floating">Valor</ion-label>
                     <ion-input type="text" inputmode="text" name="value-{{sensor.id}}" [(ngModel)]="sensor.lastMeasurement.value" class="form-control" disabled></ion-input>
                 </ion-item>
-
-
             </ion-card-content>
         </ion-card>
+
+        <ion-button expand="block" fill="outline" (click)="addMeasurement()" class="btn btn-default bottom-button">
+            <ion-icon name="add-circle-outline"></ion-icon>
+            Nueva medición
+        </ion-button>
     </div>
 </ion-content>
