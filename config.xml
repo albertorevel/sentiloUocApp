@@ -2,7 +2,7 @@
 <widget id="io.ionic.starter" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Sentilo App</name>
     <description>La app que permite usar Sentilo desde un smartphone</description>
-    <author email="arevel@uoc.edu">Alberto Revel/author>
+    <author email="arevel@uoc.edu">Alberto Revel</author>
     <content original-src="index.html" src="http://192.168.1.101:8100" />
     <access origin="*" />
     <allow-intent href="http://*/*" />

@@ -1,3 +1,6 @@
+/**
+ * Entidad que representa un tipo de componente del catálogo de Sentilo.
+ */
 export class CustomComponentType {
 
     // Primitive types
@@ -22,6 +25,9 @@ export class CustomComponentType {
         this._name = value;
     }
 
+     /**
+     * Devuelve una copia del objeto
+     */
     public getClone(): CustomComponentType {
         var copiedCustomComponentType = new CustomComponentType(this.id);
 

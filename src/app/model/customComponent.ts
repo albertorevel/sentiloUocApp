@@ -2,6 +2,9 @@ import { CustomComponentType } from './customComponentType';
 import { CustomLocation } from './customLocation';
 import { Sensor } from './sensor';
 
+/**
+ * Entidad que representa un componente del catálogo de Sentilo.
+ */
 export class CustomComponent {
 
     // Primitive types
@@ -85,6 +88,9 @@ export class CustomComponent {
       this.hasNewType = false;
     }
 
+    /**
+     * Devuelve una copia del objeto
+     */
     public getClone() : CustomComponent {
         var clonedObject = new CustomComponent();
 

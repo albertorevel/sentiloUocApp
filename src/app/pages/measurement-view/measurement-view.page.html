@@ -9,7 +9,10 @@
 
 <ion-content>
 
+    <!-- Nuevas medidas -->
     <div [hidden]="showing">
+
+        <!-- Selector de componente -->
         <div [hidden]="customComponent.id.length > 0">
             <ion-select value="select" required [(ngModel)]="customComponentId" name="customComponentIdSelect" class="form-control" placeholder="Seleccione un componente">
                 <ion-select-option *ngFor="let eachComponent of customComponents" value="{{eachComponent.id}}">{{eachComponent.id}}</ion-select-option>
@@ -19,7 +22,7 @@
             </ion-button>
         </div>
 
-
+        <!-- Formulario para añadir nuevas medidas -->
         <form #measurementForm="ngForm" [hidden]="customComponent.id.length == 0">
             <h1>Nueva medición</h1>
 
@@ -70,6 +73,8 @@
         </form>
 
     </div>
+
+    <!-- Vista de medidas de un componente -->
     <div [hidden]="!showing">
         <h1>Ultimas mediciones</h1>
         <ion-card *ngFor="let sensor of customComponent.sensors" class="multiline">

@@ -1,3 +1,6 @@
+/**
+ * Entidad que representa una ubicación.
+ */
 export class CustomLocation {
 
     // Primitive types
@@ -37,6 +40,9 @@ export class CustomLocation {
 
     }
 
+    /**
+     * Devuelve una copia del objeto
+     */
     public getClone(): CustomLocation {
         var copiedLocation = new CustomLocation;
 

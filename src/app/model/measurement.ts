@@ -1,5 +1,8 @@
 import { CustomLocation } from './customLocation';
 
+/**
+ * Entidad que representa una medida de un sensor de Sentilo.
+ */
 export class Measurement {
 
     // Primitive types
@@ -40,6 +43,9 @@ export class Measurement {
         this._active = value;
     }
 
+    /**
+     * Devuelve una copia del objeto
+     */
     public getClone(): Measurement {
         var copiedMeasurement = new Measurement();
 

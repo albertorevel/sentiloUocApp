@@ -1,3 +1,6 @@
+/**
+ * Entidad que representa un tipo de sensor del catálogo de Sentilo.
+ */
 export class SensorType {
 
     // Primitive types
@@ -22,6 +25,9 @@ export class SensorType {
         this._name = value;
     }
 
+    /**
+     * Devuelve una copia del objeto
+     */
     public getClone(): SensorType {
         var copiedSensorType = new SensorType(this.id);
 

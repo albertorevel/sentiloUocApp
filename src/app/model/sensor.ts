@@ -2,6 +2,9 @@ import { SensorType } from './sensorType';
 import { CustomLocation } from './customLocation';
 import { Measurement } from './measurement';
 
+/**
+ * Entidad que representa un sensor del catálogo de Sentilo.
+ */
 export class Sensor {
     
     // Primitive types
@@ -108,6 +111,9 @@ export class Sensor {
       this.hasNewType = false;
     }
 
+    /**
+     * Devuelve una copia del objeto
+     */
     public getClone(): Sensor {
        var copiedSensor = new Sensor();
 

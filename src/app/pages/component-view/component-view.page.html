@@ -9,6 +9,7 @@
 </ion-header>
 
 <ion-content>
+    <!-- Botones superiores -->
     <ion-grid id="component-buttons" [hidden]="modify">
         <ion-row>
             <ion-col>
@@ -26,6 +27,7 @@
         </ion-row>
     </ion-grid>
 
+    <!-- Información del componente -->
     <h1>Información del componente</h1>
     <form #componentForm="ngForm">
         <ion-item [hidden]="customComponent.id && !creation">
@@ -65,6 +67,7 @@
             <ion-input type="number " inputmode="number " [(ngModel)]="customComponent.location.latitude " name="latitude " class="form-control " [readonly]="!modify " [disabled]="!modify "></ion-input>
         </ion-item>
 
+        <!-- Sensores existentes del componente -->
         <h2>Sensores asociados</h2>
         <ion-card *ngFor="let sensor of customComponent.sensors">
             <ion-card-header color="primary">
@@ -101,6 +104,7 @@
             </ion-card-content>
         </ion-card>
 
+        <!-- Sensores nuevos del componente -->
         <ion-card *ngFor="let sensor2 of newSensors " class="multiline new-sensor">
             <ion-card-header color="primary">
                 <ion-card-title>Nuevo sensor</ion-card-title>
@@ -170,6 +174,7 @@
 
     </form>
 
+    <!-- Botones inferiores -->
     <ion-grid [hidden]="modify">
         <ion-row>
             <ion-col>
