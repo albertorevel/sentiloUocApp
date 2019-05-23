@@ -1,11 +1,11 @@
 export class CustomComponentType {
 
+    // Primitive types
     private _id: string;
     private _name: string;
 
     constructor (id:string) {
-        this.id = id;
-        this.name = '';   
+        this.id = id;  
     }
 
     public get id(): string {
@@ -20,5 +20,14 @@ export class CustomComponentType {
     }
     public set name(value: string) {
         this._name = value;
+    }
+
+    public getClone(): CustomComponentType {
+        var copiedCustomComponentType = new CustomComponentType(this.id);
+
+        // Primitive types
+        copiedCustomComponentType.name = this.name;
+
+        return copiedCustomComponentType;
     }
 }

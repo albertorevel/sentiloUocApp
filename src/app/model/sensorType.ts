@@ -1,13 +1,11 @@
 export class SensorType {
 
+    // Primitive types
     private _id: string;
     private _name: string;
-    private _newId: string;
 
     constructor (id: string) {
         this.id = id;
-        this.name = '';
-        this.newId = '';
     }
     
     public get id(): string {
@@ -24,11 +22,13 @@ export class SensorType {
         this._name = value;
     }
 
-    public get newId(): string {
-        return this._newId;
-    }
-    public set newId(value: string) {
-        this._newId = value;
+    public getClone(): SensorType {
+        var copiedSensorType = new SensorType(this.id);
+
+        // Primitive types
+        copiedSensorType.name = this.name;
+
+        return copiedSensorType;
     }
     
 }

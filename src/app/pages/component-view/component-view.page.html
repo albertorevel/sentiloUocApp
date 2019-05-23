@@ -3,7 +3,8 @@
         <ion-buttons slot="start">
             <ion-back-button></ion-back-button>
         </ion-buttons>
-        <ion-title>{{customComponent.id}}</ion-title>
+        <ion-title [hidden]="creation">{{customComponent.id}}</ion-title>
+        <ion-title [hidden]="!creation">Nuevo componente</ion-title>
     </ion-toolbar>
 </ion-header>
 
@@ -50,7 +51,7 @@
         </ion-item>
 
         <ion-item>
-            <ion-label position="stacked ">Descripción</ion-label>
+            <ion-label position="floating ">Descripción</ion-label>
             <ion-input type="text " inputmode="text " [(ngModel)]="customComponent.description " name="description " class="form-control " [readonly]="!modify " [disabled]="!modify "></ion-input>
         </ion-item>
 
@@ -172,5 +173,9 @@
     <ion-button expand="block" fill="outline" (click)="enableModify() " class="btn btn-default bottom-button" [hidden]="modify ">
         <ion-icon slot="start" name="create"></ion-icon>
         Modificar
+    </ion-button>
+    <ion-button expand="block" fill="outline" (click)="copyComponent() " class="btn btn-default bottom-button" [hidden]="modify ">
+        <ion-icon slot="start" name="create"></ion-icon>
+        Copiar
     </ion-button>
 </ion-content>

@@ -1,8 +1,11 @@
 export class CustomLocation {
 
+    // Primitive types
     private _longitude: number;
     private _latitude: number;
     
+    constructor() { }
+
     public get longitude(): number {
         return this._longitude;
     }
@@ -32,5 +35,15 @@ export class CustomLocation {
         this.latitude = Number(locations[0]);
         this.longitude = Number(locations[1]);
 
+    }
+
+    public getClone(): CustomLocation {
+        var copiedLocation = new CustomLocation;
+
+        // Primitive types
+        copiedLocation.longitude = this.longitude;
+        copiedLocation.latitude = this.latitude;
+
+        return copiedLocation;
     }
 }

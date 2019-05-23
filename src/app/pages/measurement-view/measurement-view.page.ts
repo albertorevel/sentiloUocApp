@@ -64,9 +64,9 @@ export class MeasurementViewPage implements OnInit {
             loadingElement.dismiss();
           });
         });
-
-        
       }
+
+      this.resetNewMeasurements();
     }
 
     if (typeof this.customComponent === "undefined" || this.customComponent == null) {
@@ -117,6 +117,19 @@ export class MeasurementViewPage implements OnInit {
       this.showing = true;
     } else {
       this.location.back();
+    }
+
+    this.resetNewMeasurements();
+  }
+
+  resetNewMeasurements() {
+    if (typeof this.customComponent !== "undefined" && this.customComponent != null &&
+        typeof this.customComponent.sensors !== "undefined" && this.customComponent.sensors != null ) {
+          this.customComponent.sensors.forEach(sensor => {
+            if (typeof sensor !== "undefined" && sensor != null ) {
+              sensor.newMeasurement = new Measurement();
+            }
+          });
     }
   }
 

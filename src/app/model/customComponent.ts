@@ -4,12 +4,17 @@ import { Sensor } from './sensor';
 
 export class CustomComponent {
 
+    // Primitive types
     private _id: string = '';
     private _description: string = '';   
+    private _hasNewType: boolean = false;
+
+    // Objects
     private _location: CustomLocation = new CustomLocation();
     private _type: CustomComponentType = new CustomComponentType('');
     private _newType: CustomComponentType = new CustomComponentType('');
-    private _hasNewType: boolean = false;
+    
+    // Arrays
     private _sensors: Array<Sensor> = new Array();
 
     constructor() { }
@@ -78,5 +83,26 @@ export class CustomComponent {
       this.type = this.newType;
       this.newType = new CustomComponentType('');
       this.hasNewType = false;
+    }
+
+    public getClone() : CustomComponent {
+        var clonedObject = new CustomComponent();
+
+        // Primitive types
+        clonedObject.id = this.id;
+        clonedObject.description = this.description;
+        clonedObject.hasNewType = this.hasNewType;
+
+        // Objects
+        clonedObject.location = this.location.getClone();
+        clonedObject.type = this.type.getClone();
+        clonedObject.newType = this.newType.getClone();
+
+        // Arrays
+        this.sensors.forEach(sensor => {
+            clonedObject.sensors.push(sensor.getClone());
+        })
+
+        return clonedObject;
     }
 }

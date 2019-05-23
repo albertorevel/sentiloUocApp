@@ -83,7 +83,10 @@ export class ModelService {
    * Returns a component with an id passed as a parameter
    */
   getComponentClone(id: string): CustomComponent {
-    return this.cloneObject(this.components[id]);
+    if (this.components[id]) {
+      return this.components[id].getClone();
+    } 
+    return null;
   }
   
 
@@ -187,6 +190,7 @@ export class ModelService {
       sensorPayload['unit'] = sensor.unit;
       sensorPayload['component'] = customComponent.id;
       sensorPayload['componentType'] = customComponent.correctType.id;
+      sensorPayload['componentDesc'] = customComponent.description;
       
       var location = customComponent.location.locationString;
       if (location.length > 0) {
@@ -317,7 +321,6 @@ export class ModelService {
             }
 
             customComponent.sensors.push(newSensor);
-            newSensor.customComponent = customComponent;
             
           }
         }
@@ -343,7 +346,6 @@ export class ModelService {
         if (typeof sensor !== 'undefined' && sensor != null && element.observations.length > 0) {
           var newMeasurement: Measurement = new Measurement();
           
-          newMeasurement.sensor = sensor;
           newMeasurement.value = element.observations[0].value;
           
           var newDate = new Date(element.observations[0].time);

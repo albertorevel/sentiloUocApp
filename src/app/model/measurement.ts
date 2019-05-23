@@ -1,18 +1,17 @@
-import { Sensor } from './sensor';
 import { CustomLocation } from './customLocation';
 
 export class Measurement {
 
+    // Primitive types
     private _value: string;
     private _date: string;
-    private _location: CustomLocation;
-    private _active: boolean;
-    private _sensor: Sensor;
+    private _active: boolean  = true;
 
-    constructor() {
-        this._value = '';
-        this._active = true;
-    }
+    // Objects
+    private _location: CustomLocation = new CustomLocation();
+    
+    constructor() { }
+
     public get value(): string {
         return this._value;
     }
@@ -40,12 +39,18 @@ export class Measurement {
     public set active(value: boolean) {
         this._active = value;
     }
-    
-    public get sensor(): Sensor {
-        return this._sensor;
-    }
-    public set sensor(value: Sensor) {
-        this._sensor = value;
-    }
 
+    public getClone(): Measurement {
+        var copiedMeasurement = new Measurement();
+
+        // Primitive types
+        copiedMeasurement.value = this.value;
+        copiedMeasurement.date = this.date;
+        copiedMeasurement.active = this.active;
+
+        // Objects
+        copiedMeasurement.location = this.location.getClone();
+
+        return copiedMeasurement;
+    }
 }
