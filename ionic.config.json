@@ -1,12 +1,5 @@
 {
-    "name": "sentiloUocApp",
-    "integrations": {
-        "cordova": {}
-    },
-    "type": "angular",
-    "id": "08845f5d",
-    "proxies": [{
-        "path": "/catalog3",
-        "proxyUrl": "https://api-sentilo.diba.cat/catalog"
-    }]
+  "name": "New Ionic App",
+  "integrations": {},
+  "type": "angular"
 }
