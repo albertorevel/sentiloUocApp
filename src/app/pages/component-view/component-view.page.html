@@ -170,12 +170,20 @@
 
     </form>
 
-    <ion-button expand="block" fill="outline" (click)="enableModify() " class="btn btn-default bottom-button" [hidden]="modify ">
-        <ion-icon slot="start" name="create"></ion-icon>
-        Modificar
-    </ion-button>
-    <ion-button expand="block" fill="outline" (click)="copyComponent() " class="btn btn-default bottom-button" [hidden]="modify ">
-        <ion-icon slot="start" name="create"></ion-icon>
-        Copiar
-    </ion-button>
+    <ion-grid [hidden]="modify">
+        <ion-row>
+            <ion-col>
+                <ion-button expand="block" fill="outline" (click)="enableModify() " class="btn btn-default" [hidden]="modify ">
+                    <ion-icon slot="start" name="create"></ion-icon>
+                    Modificar
+                </ion-button>
+            </ion-col>
+            <ion-col>
+                <ion-button expand="block" fill="outline" (click)="copyComponent() " class="btn btn-default" [hidden]="modify ">
+                    <ion-icon name="copy"></ion-icon>
+                    Copiar
+                </ion-button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
 </ion-content>
