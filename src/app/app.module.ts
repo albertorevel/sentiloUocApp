@@ -10,7 +10,6 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
 import { HttpClientModule } from '@angular/common/http';
-import { CONFIG_TOKEN } from './applicationProperties';
 import { HTTP } from '@ionic-native/http/ngx';
 
 import { IonicStorageModule } from '@ionic/storage';
@@ -30,7 +29,6 @@ import { IonicStorageModule } from '@ionic/storage';
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    { provide: CONFIG_TOKEN, useValue: CONFIG_TOKEN},
     HTTP
   ],
   bootstrap: [AppComponent]
