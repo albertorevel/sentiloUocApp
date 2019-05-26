@@ -14,6 +14,7 @@ export class LoginPage implements OnInit {
 
   private name: string;
   private token: string;
+  private apiURL: string;
 
   constructor(
     public router: Router, 
@@ -32,7 +33,7 @@ export class LoginPage implements OnInit {
       }).then(loadingElement => {
         
         loadingElement.present();
-        this.authenticationService.login(this.name, this.token);
+        this.authenticationService.login(this.name, this.token, this.apiURL);
         this.modelService.findAllElements().subscribe(result => {
           if(result) {
             this.router.navigate(['home'],{ replaceUrl: true });

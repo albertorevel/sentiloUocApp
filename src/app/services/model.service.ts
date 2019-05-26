@@ -43,6 +43,10 @@ export class ModelService {
     return this.authenticationService.providerName;
   }
 
+  public get apiURL() : string {
+    return this.authenticationService.apiURL;
+  }
+
   public get sensorTypes(): {} {
     return this._sensorTypes;
   }
@@ -108,7 +112,7 @@ export class ModelService {
   findAllElements() {
 
     var observable = Observable.create((observer:any) => {
-        this.nativeHttp.get('https://api-sentilo.diba.cat/catalog',{}, this.headers).then( data => {
+        this.nativeHttp.get(`${this.apiURL}/catalog`,{}, this.headers).then( data => {
             let result = this.parseElements(data);
             observer.next(result);
           },
@@ -156,14 +160,14 @@ export class ModelService {
 
     if (sensorsToAdd.length > 0) {
       this.addSensors(customComponent, sensorsToAdd).subscribe(data => {
-        return from(this.nativeHttp.put(`https://api-sentilo.diba.cat/catalog/${this.providerName}`,objectPayload, this.headers));
+        return from(this.nativeHttp.put(`${this.apiURL}/catalog/${this.providerName}`,objectPayload, this.headers));
       },
       _error => {
         return from(new Promise(resolve => resolve(_error)));
       });
     }
 
-    return from(this.nativeHttp.put(`https://api-sentilo.diba.cat/catalog/${this.providerName}`,objectPayload, this.headers));
+    return from(this.nativeHttp.put(`${this.apiURL}/catalog/${this.providerName}`,objectPayload, this.headers));
 
   }
 
@@ -205,7 +209,7 @@ export class ModelService {
       objectPayload.sensors.push(sensorPayload);
     }
 
-    return from(this.nativeHttp.post(`https://api-sentilo.diba.cat/catalog/${this.providerName}`,objectPayload, this.headers));
+    return from(this.nativeHttp.post(`${this.apiURL}/catalog/${this.providerName}`,objectPayload, this.headers));
   }
 
   getComponentMeasurements(customComponent: CustomComponent) {
@@ -216,7 +220,7 @@ export class ModelService {
     });
 
     var observable = Observable.create((observer:any) => {
-      this.nativeHttp.get(`https://api-sentilo.diba.cat/data/${this.providerName}?limit=1`, {}, this.headers).then(data => {
+      this.nativeHttp.get(`${this.apiURL}/data/${this.providerName}?limit=1`, {}, this.headers).then(data => {
         this.parseSensorsMeasurements(data, sensorsMap);
         observer.next(true);
       },
@@ -253,7 +257,7 @@ export class ModelService {
       objectPayload.sensors.push(sensorPayload);
     });
 
-    return from(this.nativeHttp.put(`https://api-sentilo.diba.cat/data/${this.providerName}`,objectPayload, this.headers));
+    return from(this.nativeHttp.put(`${this.apiURL}/data/${this.providerName}`,objectPayload, this.headers));
   }//TODO error
 
   // PARSERS
