@@ -1,13 +1,14 @@
+/**
+ * Entidad que representa un tipo de componente del catálogo de Sentilo.
+ */
 export class CustomComponentType {
 
+    // Primitive types
     private _id: string;
     private _name: string;
-    private _newId: string;
-    
+
     constructor (id:string) {
-        this.id = id;
-        this.name = '';   
-        this.newId = '';
+        this.id = id;  
     }
 
     public get id(): string {
@@ -23,12 +24,16 @@ export class CustomComponentType {
     public set name(value: string) {
         this._name = value;
     }
-    
-    public get newId(): string {
-        return this._newId;
+
+     /**
+     * Devuelve una copia del objeto
+     */
+    public getClone(): CustomComponentType {
+        var copiedCustomComponentType = new CustomComponentType(this.id);
+
+        // Primitive types
+        copiedCustomComponentType.name = this.name;
+
+        return copiedCustomComponentType;
     }
-    public set newId(value: string) {
-        this._newId = value;
-    }
-    
 }

@@ -1,27 +1,27 @@
 import { SensorType } from './sensorType';
-import { CustomComponent } from './customComponent';
 import { CustomLocation } from './customLocation';
 import { Measurement } from './measurement';
 
+/**
+ * Entidad que representa un sensor del catálogo de Sentilo.
+ */
 export class Sensor {
     
+    // Primitive types
     private _id:string; 
-    private _newId: number; // TODO
+    private _newId: number; 
+    private _description:string;
+    private _hasNewType: boolean = false;
+    private _unit: string; 
+
+    // Primitive types
+    private _location:CustomLocation = new CustomLocation();
+    private _type:SensorType = new SensorType('');;
+    private _newType: SensorType = new SensorType('');
+    private _newMeasurement: Measurement = new Measurement();
+    private _lastMeasurement: Measurement = new Measurement();
     
-    private _description:string = '';
-    private _location:CustomLocation;
-    private _type:SensorType;
-    private _unit: string;//TODO
-    private _dataType: string; //TODO
-    private _customComponent:CustomComponent;
-    private _measurements: Array<Measurement>;
-    
-    constructor() {
-        this._location = new CustomLocation();
-        this._type = new SensorType('');
-        this._customComponent = new CustomComponent();
-        this._measurements = new Array<Measurement>();
-    }
+    constructor() { }
 
     public get id(): string {
         return this._id;
@@ -57,25 +57,80 @@ export class Sensor {
     public set type(value: SensorType) {
         this._type = value;
     }
-   
-    public get customComponent(): CustomComponent {
-        return this._customComponent;
+
+    public get newType(): SensorType {
+        return this._newType;
     }
-    public set customComponent(value: CustomComponent) {
-        this._customComponent = value;
+    public set newType(value: SensorType) {
+        this._newType = value;
     }
 
-    public get measurements(): Array<Measurement> {
-        return this._measurements;
+    public get hasNewType(): boolean {
+        return this._hasNewType;
     }
-    public set measurements(value: Array<Measurement>) {
-        this._measurements = value;
+    public set hasNewType(value: boolean) {
+        this._hasNewType = value;
+    }
+    
+    public get correctType () : SensorType {
+        return this.hasNewType ? this.newType : this.type;
     }
 
-    public fillData(id:string, description:string, location:CustomLocation, type:SensorType) {
+    public get unit(): string {
+        return this._unit;
+    }
+    public set unit(value: string) {
+        this._unit = value;
+    }
+
+    public get newMeasurement(): Measurement {
+        return this._newMeasurement;
+    }
+    public set newMeasurement(value: Measurement) {
+        this._newMeasurement = value;
+    }
+
+    public get lastMeasurement(): Measurement {
+        return this._lastMeasurement;
+    }
+    public set lastMeasurement(value: Measurement) {
+        this._lastMeasurement = value;
+    }
+
+    public fillData(id:string, description:string, location:CustomLocation, type:SensorType, unit: string, dataType: string) {
         this.id = id;
         this.description = description;
         this.location = location;
         this.type = type;
+        this.unit = unit;
+    }
+
+    public updateNewType() {
+      this.type = this.newType;
+      this.newType = new SensorType('');
+      this.hasNewType = false;
+    }
+
+    /**
+     * Devuelve una copia del objeto
+     */
+    public getClone(): Sensor {
+       var copiedSensor = new Sensor();
+
+       // Primitive types
+       copiedSensor.id = this.id;
+       copiedSensor.newId = this.newId;
+       copiedSensor.description = this.description;
+       copiedSensor.hasNewType = this.hasNewType;
+       copiedSensor.unit = this.unit;
+       
+       // Objects
+       copiedSensor.location = this.location.getClone();
+       copiedSensor.type = this.type.getClone();
+       copiedSensor.newType = this.newType.getClone();
+       copiedSensor.newMeasurement = this.newMeasurement.getClone();
+       copiedSensor.lastMeasurement = this.lastMeasurement.getClone();
+
+       return copiedSensor;
     }
 }

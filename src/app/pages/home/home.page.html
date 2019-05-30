@@ -10,24 +10,23 @@
 </ion-header>
 
 <main class="scroll-content">
+
+    <!-- Lista de componentes -->
     <ion-list>
         <ion-card *ngFor="let component of components" tappable (click)="navigateToComponent(component.id) ">
-            <ion-card-header>
-                <ion-card-title color="primary ">{{component.id}} ({{component.type.id}})</ion-card-title>
-                <ion-text>{{component.description}}</ion-text>
+            <ion-card-header color="primary">
+                <ion-card-title>{{component.id}} ({{component.type.id}})</ion-card-title>
+                <ion-card-subtitle>{{component.description}}</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+
                 <ion-list *ngFor="let sensor of component.sensors">
                     <ion-item>
                         <ion-label>{{sensor.id}} ({{sensor.type.id}})</ion-label>
                     </ion-item>
                 </ion-list>
-            </ion-card-header>
+            </ion-card-content>
 
         </ion-card>
     </ion-list>
-
-    <ion-fab vertical="bottom" horizontal="right" slot="fixed">
-        <ion-fab-button>
-            <ion-icon (click)="navigateToComponent('')" name="add">+</ion-icon>
-        </ion-fab-button>
-    </ion-fab>
 </main>

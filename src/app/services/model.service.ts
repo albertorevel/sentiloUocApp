@@ -7,7 +7,6 @@ import { CustomComponent } from '../model/customComponent';
 import { SensorType } from '../model/sensorType';
 import { Observable, from } from 'rxjs';
 import { HTTP } from '@ionic-native/http/ngx';
-import { Storage } from '@ionic/storage';
 import { AuthenticationService } from './authentication-service.service';
 
 @Injectable({
@@ -21,21 +20,17 @@ export class ModelService {
   private _sensorTypes = {};
   private httpOptions = {'Content-Type': 'application/json; charset=UTF-8', 'IDENTITY_KEY' : ''};
 
-  httpOptions1String = {'Content-Type': 'application/json; charset=UTF-8',
-  'IDENTITY_KEY': '8de83e2f39505b22c237b92093c7ed01e671f01b479d6706d7cc68b2b3a82bf2'};
-
-  httpOptions2String = {'Content-Type': 'application/json; charset=UTF-8',
-  'IDENTITY_KEY': '81d0e9c5d1b0dcc9ee9a15333774da126744ca3ee80c1254d58375f73d1b4095'};
-
-
   constructor(
-    private nativeHttp:HTTP, 
+    private _nativeHttp:HTTP, 
     private authenticationService: AuthenticationService
   ) {
+  }            
 
-    this.nativeHttp.setDataSerializer('json');
+  private get nativeHttp(): HTTP {
+
+    this._nativeHttp.setDataSerializer('json');
+    return this._nativeHttp;
   }
-
 
   private get headers(): {} {
     this.httpOptions['IDENTITY_KEY'] = this.authenticationService.providerToken;
@@ -48,11 +43,15 @@ export class ModelService {
     return this.authenticationService.providerName;
   }
 
+  public get apiURL() : string {
+    return this.authenticationService.apiURL;
+  }
+
   public get sensorTypes(): {} {
     return this._sensorTypes;
   }
 
-  public get customComponentTypes()  {
+  public get customComponentTypes() {
     return this._customComponentTypes;
   }
 
@@ -70,27 +69,6 @@ export class ModelService {
     return Object.values(this.sensorTypes);
   }
 
-  getMeasurements(sensorId: string, limit: number) {
-    var sensor = this.getSensor(sensorId);
-
-    if (typeof sensor !== 'undefined' && sensor != null) {
-      var observable = Observable.create((observer:any) => {
-        this.nativeHttp.get(`https://api-sentilo.diba.cat/data/${this.providerName}/${sensorId}?limit=${limit}`, {}, this.headers).then(data => {
-          sensor.measurements = this.parseMeasurements(data);
-          observer.next()
-        });
-      });
-    }
-
-    return observable;
-    
-  }
-
-  parseMeasurements (rawData): Array<Measurement> {
-    console.log(rawData);
-    return null;
-  }
-
   /**
    * Returns all the components retrieved for the provider
    */
@@ -104,12 +82,48 @@ export class ModelService {
   getComponent(id: string): CustomComponent {
     return this.components[id];
   }
+  
+   /**
+   * Returns a component with an id passed as a parameter
+   */
+  getComponentClone(id: string): CustomComponent {
+    if (this.components[id]) {
+      return this.components[id].getClone();
+    } 
+    return null;
+  }
+  
 
   /**
    * Returns a sensor with an id passed as a parameter
    */
   getSensor(id: string): Sensor {
     return this.sensors[id];
+  }
+
+  setComponent(customComponent: CustomComponent) {
+    if (customComponent.id) {
+      this.components[customComponent.id] = customComponent;
+    }
+  }
+
+  // API CALLS
+
+  findAllElements() {
+
+    var observable = Observable.create((observer:any) => {
+        this.nativeHttp.get(`${this.apiURL}/catalog`,{}, this.headers).then( data => {
+            let result = this.parseElements(data);
+            observer.next(result);
+          },
+          _error => {
+            observer.next(false);
+          }
+        )
+    });
+
+    return observable;
+    
   }
 
   /**
@@ -122,7 +136,12 @@ export class ModelService {
     var componentPayload = {};
     componentPayload['component'] = customComponent.id;
     componentPayload['componentDesc'] = customComponent.description;
-    componentPayload['componentType'] = customComponent.type.id;
+    componentPayload['componentType'] = customComponent.correctType.id;
+
+    var location = customComponent.location.locationString;
+    if (location.length > 0) {
+      componentPayload['location'] = location;
+    }
 
     objectPayload.components.push(componentPayload);
 
@@ -133,79 +152,122 @@ export class ModelService {
 
       sensorPayload['sensor'] = sensor.id;
       sensorPayload['description'] = sensor.description;
-      sensorPayload['type'] = sensor.type.id;
-
-      //TODO unit and datatype
-
+      sensorPayload['unit'] = sensor.unit;
+      sensorPayload['type'] = sensor.correctType.id;
+      
       objectPayload.sensors.push(sensorPayload);
     }
 
-    // var messagePayload = JSON.stringify(objectPayload);
-
     if (sensorsToAdd.length > 0) {
-      this.addSensors(customComponent, sensorsToAdd);
-    }
-    
-    // TODO manage responses
-
-    return from(this.nativeHttp.put(`https://api-sentilo.diba.cat/catalog/${this.providerName}`,objectPayload, this.headers));
-
-}
-
-/**
- * 
- * @param customComponent 
- * @param sensorsToAdd 
- */
-addSensors(customComponent: CustomComponent, sensorsToAdd: Array<Sensor>) {
-
-  var objectPayload = {"sensors":[]};
-  var sensorPayload = {};
-
-  for( var sensor of sensorsToAdd) {
-    sensorPayload = {};
-
-    sensorPayload['sensor'] = sensor.id;
-
-    if (sensor.description && sensor.description.length > 0) {
-      sensorPayload['description'] = sensor.description;
+      this.addSensors(customComponent, sensorsToAdd).subscribe(data => {
+        return from(this.nativeHttp.put(`${this.apiURL}/catalog/${this.providerName}`,objectPayload, this.headers));
+      },
+      _error => {
+        return from(new Promise(resolve => resolve(_error)));
+      });
     }
 
-    sensorPayload['type'] = sensor.type.id;
-    sensorPayload['component'] = customComponent.id;
-    sensorPayload['componentType'] = customComponent.type.id;
+    return from(this.nativeHttp.put(`${this.apiURL}/catalog/${this.providerName}`,objectPayload, this.headers));
 
-    if (customComponent.description && customComponent.description.length > 0) {
-      sensorPayload['componentDesc'] = customComponent.description;
-    }
-    
-
-    //TODO unit and datatype
-
-    objectPayload.sensors.push(sensorPayload);
   }
 
-  // var messagePayload: string = JSON.stringify(objectPayload);
-  return from(this.nativeHttp.post(`https://api-sentilo.diba.cat/catalog/${this.providerName}`,objectPayload, this.headers));
-}
+  /**
+   * 
+   * @param customComponent 
+   * @param sensorsToAdd 
+   */
+  addSensors(customComponent: CustomComponent, sensorsToAdd: Array<Sensor>) {
 
-  findAllElements() {
+    var objectPayload = {"sensors":[]};
+    var sensorPayload = {};
 
-    var observable = Observable.create((observer:any) => {
-        this.nativeHttp.get('https://api-sentilo.diba.cat/catalog',{}, this.headers).then( data => {
-            this.parseElements(data);
-            observer.next(true);
-          }
-        )
+    for( var sensor of sensorsToAdd) {
+      sensorPayload = {};
+
+      sensorPayload['sensor'] = sensor.id;
+
+      if (sensor.description && sensor.description.length > 0) {
+        sensorPayload['description'] = sensor.description;
+      }
+
+      sensorPayload['type'] = sensor.correctType.id;
+      sensorPayload['unit'] = sensor.unit;
+      sensorPayload['component'] = customComponent.id;
+      sensorPayload['componentType'] = customComponent.correctType.id;
+      sensorPayload['componentDesc'] = customComponent.description;
+      
+      var location = customComponent.location.locationString;
+      if (location.length > 0) {
+        sensorPayload['location'] = location;
+      }
+      
+
+      if (customComponent.description && customComponent.description.length > 0) {
+        sensorPayload['componentDesc'] = customComponent.description;
+      }
+    
+      objectPayload.sensors.push(sensorPayload);
+    }
+
+    return from(this.nativeHttp.post(`${this.apiURL}/catalog/${this.providerName}`,objectPayload, this.headers));
+  }
+
+  getComponentMeasurements(customComponent: CustomComponent) {
+    
+    var sensorsMap = {};
+    customComponent.sensors.forEach(sensor => {
+      sensorsMap[sensor.id] = sensor;
     });
 
-    return observable;
+    var observable = Observable.create((observer:any) => {
+      this.nativeHttp.get(`${this.apiURL}/data/${this.providerName}?limit=1`, {}, this.headers).then(data => {
+        this.parseSensorsMeasurements(data, sensorsMap);
+        observer.next(true);
+      },
+      _error => {
+        observer.next(false);
+      });
+    });
     
+    return observable;
   }
 
-  parseElements(rawData) {
+
+  addMeasurements(sensors: Array<Sensor>) {
+    var objectPayload = {'sensors' : []};
+    var sensorPayload = {}
+    var observationPayload = {};
+
+    // Por el momento añadimos uno solo por sensor como máximo
+    sensors.forEach(sensor => {
+      sensorPayload = {};
+      observationPayload = {};
+
+      sensorPayload['sensor'] = sensor.id;
+      sensorPayload['observations'] = [];
+      
+      observationPayload['value'] = sensor.newMeasurement.value;
+
+      if (typeof sensor.newMeasurement.date !== 'undefined' && sensor.newMeasurement.date != null && sensor.newMeasurement.date.length > 0) {
+        observationPayload['timestamp'] = this.parseTimeFromUTC(sensor.newMeasurement.date);
+      }
+      
+      sensorPayload['observations'].push(observationPayload);
+
+      objectPayload.sensors.push(sensorPayload);
+    });
+
+    return from(this.nativeHttp.put(`${this.apiURL}/data/${this.providerName}`,objectPayload, this.headers));
+  }//TODO error
+
+  // PARSERS
+
+  parseElements(rawData) : boolean {
     
+    let result = false;
+
     if(rawData && rawData.data) {
+
       let data = JSON.parse(rawData.data);
 
       try {
@@ -223,7 +285,9 @@ addSensors(customComponent: CustomComponent, sensorsToAdd: Array<Sensor>) {
             newSensor.fillData(sensor['sensor'],
               sensor['description'],
               newLocation,
-              null);
+              null,
+              sensor['unit'],
+              sensor['dataType']);
     
             this.sensors[sensor.sensor] = newSensor;
             
@@ -261,18 +325,62 @@ addSensors(customComponent: CustomComponent, sensorsToAdd: Array<Sensor>) {
             }
 
             customComponent.sensors.push(newSensor);
-            newSensor.customComponent = customComponent;
             
           }
         }
+        result = true;
       }
       catch(e) {
-        console.log(e);
-        //TODO: ver que hacer
+       result = false;
       }
-
+    
     }
+
+    return result;
     
   }
 
+  parseSensorsMeasurements (rawData, sensors) {
+    if (rawData && rawData.data && JSON.parse(rawData.data)) {
+      var sensorList = JSON.parse(rawData.data).sensors;
+      sensorList.forEach(element => {
+        
+        var sensor: Sensor = sensors[element.sensor];
+        
+        if (typeof sensor !== 'undefined' && sensor != null && element.observations.length > 0) {
+          var newMeasurement: Measurement = new Measurement();
+          
+          newMeasurement.value = element.observations[0].value;
+          
+          var newDate = new Date(element.observations[0].time);
+          
+          newMeasurement.date = newDate.toISOString();
+
+          sensor.lastMeasurement = newMeasurement;
+        }
+
+      });
+    }
   }
+
+  parseTimeFromUTC(utcDate: string) : string {
+    var parsedDate: string = '';
+    var objectDate = new Date(utcDate);
+    var isoDate = objectDate.toISOString().substr(0,19)
+
+    var splittedDate = isoDate.split('T');
+    if (splittedDate.length == 2) {
+      var splittedDay = splittedDate[0].split('-') ;
+      if (splittedDay.length == 3) {
+        parsedDate = `${splittedDay[2]}/${splittedDay[1]}/${splittedDay[0]}T${splittedDate[1]}`
+      }
+    }
+
+    return parsedDate;
+  }
+
+  cloneObject(obj) {
+    return obj;
+  }
+
+}

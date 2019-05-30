@@ -12,13 +12,15 @@ export class AuthenticationService {
   private _logged: boolean = false;
   private _providerName: string = undefined;
   private _providerToken: string = undefined;
+  private _apiURL: string = undefined;
 
   constructor(private storage: Storage) { }
 
-  login(name: string, token: string) {
+  login(name: string, token: string, apiURL: string) {
     this._providerName = name;
     this._providerToken = token;
-    var provider_credentials = { 'name' : name, 'token' : token};
+    this._apiURL = apiURL;
+    var provider_credentials = { 'name' : name, 'token' : token, 'apiURL': apiURL};
     this.storage.set('provider_credentials', provider_credentials);
     this._logged = true;
   }
@@ -38,9 +40,11 @@ export class AuthenticationService {
           if (data != null) {
             this._providerName = data['name'];
             this._providerToken = data ['token'];
+            this._apiURL = data['apiURL'];
     
             if (typeof this.providerName !== 'undefined' && this.providerName != null && this.providerName.length > 0 &&
-            typeof this.providerToken !== 'undefined' && this.providerToken != null && this.providerToken.length > 0) {
+            typeof this.providerToken !== 'undefined' && this.providerToken != null && this.providerToken.length > 0 && 
+            typeof this.apiURL !== 'undefined' && this.apiURL != null && this.apiURL.length > 0) {
               
               this._logged = true;
               observer.next(true);
@@ -69,5 +73,9 @@ export class AuthenticationService {
 
   public get providerToken(): string {
     return this._providerToken;
+  }
+
+  public get apiURL(): string {
+    return this._apiURL;
   }
 }

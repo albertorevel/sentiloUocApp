@@ -1,0 +1,22 @@
+.multiline>* {
+    display: block;
+}
+
+#component-buttons {
+    margin: 10px 0px;
+    ion-button {
+        height: 5em;
+    }
+}
+
+.card-button {
+    margin-top: 10px;
+}
+
+form {
+    overflow: hidden;
+}
+
+ion-card {
+    border: 1px solid var(--ion-color-primary);
+}

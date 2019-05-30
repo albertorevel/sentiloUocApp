@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { Platform } from '@ionic/angular';
+import { Platform, LoadingController, ToastController } from '@ionic/angular';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { ModelService } from './services/model.service';
 import { Router } from '@angular/router';
@@ -13,17 +13,17 @@ import { AuthenticationService } from './services/authentication-service.service
 export class AppComponent {
   public menuOptions = [
     {
-      title: 'Create component',
+      title: 'Crear componente',
       action: 'createComponent',
       icon: 'add'
     },
     {
-      title: 'Add measurement',
+      title: 'Añadir medición',
       action: 'addMeasurement',
       icon: 'stats'
     },
     {
-      title: 'Log out',
+      title: 'Cerrar sesión',
       action: 'logout',
       icon: 'log-out'
     }
@@ -34,44 +34,61 @@ export class AppComponent {
     private statusBar: StatusBar,
     private modelService: ModelService,
     public router: Router,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private loadingCtrl: LoadingController,
+    private toastCtrl: ToastController
   ) {
     this.initializeApp();
   }
 
   initializeApp() {
     this.platform.ready().then(() => {
+
+     
       this.statusBar.styleDefault();
      
       this.authenticationService.checkLogin().subscribe(logged => {
+        this.loadingCtrl.create({
+          message: 'Cargando'
+        }).then(loadingElement => {
+          
+          loadingElement.present();
 
-        if (logged) {
+          if (logged) {
 
-          this.modelService.findAllElements().subscribe(result => {
-         
-            
-            if (result) {
-              this.router.navigate(['home']);
-            } else {
-              // TODO error
-            }
-               
-          });
+            this.modelService.findAllElements().subscribe(result => {
+          
+             
+              if (result) {
+                this.router.navigate(['home'],{ replaceUrl: true });
+              } else {
+                this.showToast('Ha ocurrido un error con el proceso de autenticación. Compruebe los datos introducidos y la conexión.');
+                this.router.navigate(['login'],{ replaceUrl: true });
+              }
+            });
 
-        } else {
-          this.router.navigate(['login']);
-        }
+          } else {
+            this.router.navigate(['login'],{ replaceUrl: true });
+          }
+
+          loadingElement.dismiss();
+        });
       });
    });
   }
 
   addCustomComponent() {
     this.router.navigate(['component-view','']);
+    
+  }
+
+  addMeasurements() {
+    this.router.navigate(['measurement-view','',false]);
   }
 
   logOut() {
     this.authenticationService.logout();
-    this.router.navigate(['login']);
+    this.router.navigate(['login'],{ replaceUrl: true });
   }
 
   execute(action: string) {
@@ -81,7 +98,7 @@ export class AppComponent {
         break;
     
       case 'addMeasurement':
-        console.log('not implemented')
+        this.addMeasurements();
         break;
 
      case 'logout':
@@ -90,5 +107,14 @@ export class AppComponent {
       default:
         break;
     }
+  }
+
+  showToast(message: string) {
+    this.toastCtrl.create({
+      message: message,
+      duration: 5000
+    }).then(toastElement => {
+      toastElement.present();
+    });
   }
 }

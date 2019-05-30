@@ -1,12 +1,20 @@
-import { Sensor } from './sensor';
 import { CustomLocation } from './customLocation';
 
+/**
+ * Entidad que representa una medida de un sensor de Sentilo.
+ */
 export class Measurement {
 
+    // Primitive types
     private _value: string;
-    private _date: Date;
-    private _location: CustomLocation;
+    private _date: string;
+    private _active: boolean  = true;
+
+    // Objects
+    private _location: CustomLocation = new CustomLocation();
     
+    constructor() { }
+
     public get value(): string {
         return this._value;
     }
@@ -14,10 +22,10 @@ export class Measurement {
         this._value = value;
     }
 
-    public get date(): Date {
+    public get date(): string {
         return this._date;
     }
-    public set date(value: Date) {
+    public set date(value: string) {
         this._date = value;
     }
 
@@ -28,9 +36,27 @@ export class Measurement {
         this._location = value;
     }
 
-    public fillData(value: string, date: Date, location: CustomLocation) {
-        this.value = value;
-        this.date = date;
-        this.location = location;
+    public get active(): boolean {
+        return this._active;
+    }
+    public set active(value: boolean) {
+        this._active = value;
+    }
+
+    /**
+     * Devuelve una copia del objeto
+     */
+    public getClone(): Measurement {
+        var copiedMeasurement = new Measurement();
+
+        // Primitive types
+        copiedMeasurement.value = this.value;
+        copiedMeasurement.date = this.date;
+        copiedMeasurement.active = this.active;
+
+        // Objects
+        copiedMeasurement.location = this.location.getClone();
+
+        return copiedMeasurement;
     }
 }
