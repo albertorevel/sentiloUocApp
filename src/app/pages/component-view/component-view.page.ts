@@ -113,13 +113,13 @@ export class ComponentViewPage implements OnInit {
             loadingElement.dismiss();
           }
           else {
-            this.submitError();
+            this.submitError(null);
             loadingElement.dismiss();
           }
           
         },
-        _error => {
-          this.submitError();
+        error => {
+          this.submitError(error);
           loadingElement.dismiss();
         });
       });
@@ -138,12 +138,12 @@ export class ComponentViewPage implements OnInit {
             loadingElement.dismiss();
           }
           else {
-            this.submitError();
+            this.submitError(null);
             loadingElement.dismiss();
           }
         },
-        _error => {
-          this.submitError();
+        error => {
+          this.submitError(error);
           loadingElement.dismiss();
         });
       });
@@ -183,8 +183,25 @@ export class ComponentViewPage implements OnInit {
     
   }
 
-  submitError() {
-    this.appComponent.showToast('Ha ocurrido un error. Compruebe los datos introducidos y la conexión.');
+  submitError(error) {
+    var message = '';
+
+    if (error != null) {
+      try {
+        JSON.parse(error.error).errorDetails.forEach( errorMessage => {
+          message += errorMessage + '\n'
+        });
+        if(error.error.includes('invalid value for field type') || error.error.includes('invalid value for field componentType')) {
+          message += 'El tipo indicado debe existir en su instancia de Sentilo';
+        }
+      } catch { }
+    }
+
+    if (message.length == 0) {
+      message = 'Ha ocurrido un error. Compruebe los datos introducidos y la conexión.';
+    }
+
+    this.appComponent.showToast(message);
   }
 
   showMeasurements() {
