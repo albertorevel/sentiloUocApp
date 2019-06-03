@@ -68,14 +68,14 @@ export class ComponentViewPage implements OnInit {
 
   enableModify() {
     this.modify = true;    
-    this.customComponent = this.modelService.cloneObject(this.customComponent);
+    this.customComponent = this.customComponent.getClone();
   }
 
   copyComponent() {
 
     this.modify = true;
     this.creation = true;    
-    this.customComponent = this.modelService.cloneObject(this.customComponent);
+    this.customComponent = this.customComponent.getClone();
     this.customComponent.id = '';
 
     while(this.customComponent.sensors.length > 0) {
