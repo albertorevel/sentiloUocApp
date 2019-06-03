@@ -25,6 +25,7 @@ export class HomePageModule {
 
   constructor (public router: Router) {}
 
+  //TODO BORRAR
   navigate(route: string) {
     this.router.navigate(['/measurement-view'])
     console.log('module navigate')

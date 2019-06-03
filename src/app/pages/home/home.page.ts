@@ -20,10 +20,14 @@ export class HomePage {
 
   ngOnInit(): void { }
 
+  /**
+   * Devuelve la lista de componentes existente en el modelo de datos de la aplicación
+   */
   public get components() {
     return this.modelService.getAllComponents();
   }
 
+  //TODO BORRAR
   navigateToComponent(id: string) {
    
     this.router.navigate(['component-view',id]);
