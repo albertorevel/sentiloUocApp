@@ -26,4 +26,11 @@ export class HomePage {
   public get components() {
     return this.modelService.getAllComponents();
   }
+
+  /**
+   * Dirige a la pantalla de vista del componente del id pasado como parámetro
+   */
+  navigateToComponent(id: string) {   
+    this.router.navigate(['component-view',id]);
+  }
 }
