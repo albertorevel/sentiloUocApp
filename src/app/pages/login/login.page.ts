@@ -26,6 +26,9 @@ export class LoginPage implements OnInit {
 
   ngOnInit() { }
 
+  /**
+   * Método que realiza la autenticación de un usuario a partir de los datos introducidos.
+   */
   loginProvider() {
     this.authenticationService.checkLogin().subscribe(logged => {
       this.loadingCtrl.create({
