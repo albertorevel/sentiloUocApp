@@ -33,7 +33,8 @@ export class MeasurementViewPage implements OnInit {
    }
 
   ngOnInit() {
-    // We read parameters and prepare data
+    // Leemos los parámetros y preparamos los datos del componente. Dependiendo de los datos que llegan,
+    // se trata de la vista de las medidas tomadas o de la introducción de nuevas
     this.customComponentId = this.route.snapshot.paramMap.get('component-id');
     this.showing = this.route.snapshot.paramMap.get('showing') == 'true';
     this.customComponents = this.modelService.getAllComponents();
@@ -43,6 +44,9 @@ export class MeasurementViewPage implements OnInit {
      
   }
 
+  /**
+   * Carga las medidas de los sensores del componente seleccionados
+   */
   loadElements() {
 
     if (typeof this.customComponentId !== "undefined" && this.customComponentId != null && this.customComponentId.length > 0) {
@@ -80,6 +84,10 @@ export class MeasurementViewPage implements OnInit {
       }
     }
   }
+
+  /**
+   * Envía los datos de las medidas introducidos por el usuario.
+   */
   sendMeasurements() {
    
     this.loadingCtrl.create({
@@ -99,10 +107,16 @@ export class MeasurementViewPage implements OnInit {
     });
   }
 
+  /**
+   * Habilita el modo de introducción de nuevas medidas.
+   */
   addMeasurement() {
     this.showing = false;
   }
 
+  /**
+   * Cancela la introducción de nuevas medidas, volviendo al punto anterior.
+   */
   cancelMeasurement() {
 
     // Eliminamos los cambios
@@ -122,6 +136,9 @@ export class MeasurementViewPage implements OnInit {
     this.resetNewMeasurements();
   }
 
+  /**
+   * Borra los datos introducidos por el usuario de nuevas medidas para los sensores mostrados
+   */
   resetNewMeasurements() {
     if (typeof this.customComponent !== "undefined" && this.customComponent != null &&
         typeof this.customComponent.sensors !== "undefined" && this.customComponent.sensors != null ) {
