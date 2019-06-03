@@ -42,8 +42,10 @@ export class CustomLocation {
         return this.latitude && this.longitude ? `${this.latitude} ${this.longitude}` : '';
     }
 
+    /**
+     * Formatea una locaclización a partir de una cadena de texto
+     */
     public fillDataString(locationToParse: string) {
-        // TODO check errors
         var locations = locationToParse.split(' ');
         this.latitude = Number(locations[0]);
         this.longitude = Number(locations[1]);

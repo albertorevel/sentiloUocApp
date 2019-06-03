@@ -26,10 +26,4 @@ export class HomePage {
   public get components() {
     return this.modelService.getAllComponents();
   }
-
-  //TODO BORRAR
-  navigateToComponent(id: string) {
-   
-    this.router.navigate(['component-view',id]);
-  }
 }
