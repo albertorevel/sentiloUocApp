@@ -9,6 +9,10 @@ export class CustomLocation {
     
     constructor() { }
 
+    /* *******************
+     * Getters and setters
+     * ******************* */
+    
     public get longitude(): number {
         return this._longitude;
     }
@@ -23,11 +27,17 @@ export class CustomLocation {
         this._latitude = value;
     }
 
+    /**
+     * Método que informa una serie de campos de la entidad de manera agrupada
+     */
     public fillData (longitude: number, latitude: number) {
         this.longitude = longitude;
         this.latitude = latitude;
     }
 
+    /**
+     * Devuelve la locaclización como una cadena de texto
+     */
     public get locationString(): string {
         return this.latitude && this.longitude ? `${this.latitude} ${this.longitude}` : '';
     }

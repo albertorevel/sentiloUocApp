@@ -15,6 +15,10 @@ export class Measurement {
     
     constructor() { }
 
+    /* *******************
+     * Getters and setters
+     * ******************* */
+
     public get value(): string {
         return this._value;
     }

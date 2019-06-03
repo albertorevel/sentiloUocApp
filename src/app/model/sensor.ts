@@ -23,6 +23,10 @@ export class Sensor {
     
     constructor() { }
 
+    /* *******************
+     * Getters and setters
+     * ******************* */
+
     public get id(): string {
         return this._id;
     }
@@ -97,6 +101,9 @@ export class Sensor {
         this._lastMeasurement = value;
     }
 
+    /**
+     * Método que informa una serie de campos de la entidad de manera agrupada
+     */
     public fillData(id:string, description:string, location:CustomLocation, type:SensorType, unit: string, dataType: string) {
         this.id = id;
         this.description = description;
@@ -105,6 +112,9 @@ export class Sensor {
         this.unit = unit;
     }
 
+    /**
+     * Método que cambia el nuevo tipo definido por uno de los tipos existentes en el modelo de la aplicación
+     */
     public updateNewType() {
       this.type = this.newType;
       this.newType = new SensorType('');
