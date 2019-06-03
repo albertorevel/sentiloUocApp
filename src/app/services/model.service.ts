@@ -117,6 +117,16 @@ export class ModelService {
     }
   }
 
+  /**
+   * Borra los datos del modelo manejado por la aplicación
+   */
+  clearData() {
+    this.components = {};
+    this.sensors = {};
+    this._customComponentTypes = {};
+    this._sensorTypes = {};
+  }
+
  /* ****************************
   * LLAMADAS A LA API DE SENTILO
   * **************************** */

@@ -106,6 +106,7 @@ export class AppComponent {
    */
   logOut() {
     this.authenticationService.logout();
+    this.modelService.clearData();
     this.router.navigate(['login'],{ replaceUrl: true });
   }
 
