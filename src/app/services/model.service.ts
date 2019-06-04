@@ -23,22 +23,30 @@ export class ModelService {
   constructor(
     private _nativeHttp:HTTP, 
     private authenticationService: AuthenticationService
-  ) {
-  }            
+  ) { }            
 
+
+  /**
+   * Devuelve el objeto de tipo HTTP (nativo) añadiendo el serializador JSON.
+   */
   private get nativeHttp(): HTTP {
-
     this._nativeHttp.setDataSerializer('json');
     return this._nativeHttp;
   }
 
+  /**
+   * Devuelve la cabecera a enviar con la petició a la API con el formato correcto
+   */
   private get headers(): {} {
     this.httpOptions['IDENTITY_KEY'] = this.authenticationService.providerToken;
 
     return this.httpOptions;
   }
 
-// shortcut
+  /* *******************
+  * Getters and setters
+  * ******************* */
+
   public get providerName() : string {
     return this.authenticationService.providerName;
   }
@@ -56,35 +64,35 @@ export class ModelService {
   }
 
   /**
-   * Returns all the components types retrieved for the provider
+   * Devuelve todos los componentes almacenados para el proveedor
    */
   getAllCustomComponentTypes(): Array<CustomComponentType> {
     return Object.values(this.customComponentTypes);
   }
 
   /**
-   * Returns all the sensor types retrieved for the provider
+   * Devuelve todos los tipos de sensor almacenados para el proveedor
    */
   getAllSensorTypes(): Array<SensorType> {
     return Object.values(this.sensorTypes);
   }
 
   /**
-   * Returns all the components retrieved for the provider
+   * Devuelve todos los componentes almacenados para el proveedor
    */
   getAllComponents(): Array<CustomComponent> {
     return Object.values(this.components);
   }
 
   /**
-   * Returns a component with an id passed as a parameter
+   * Devuelve el componente cuyo id se corresponde con el pasado por parámetro
    */
   getComponent(id: string): CustomComponent {
     return this.components[id];
   }
   
-   /**
-   * Returns a component with an id passed as a parameter
+  /**
+   * Devuelve un clon del componente cuyo id se corresponde con el pasado por parámetro, si existe
    */
   getComponentClone(id: string): CustomComponent {
     if (this.components[id]) {
@@ -92,23 +100,42 @@ export class ModelService {
     } 
     return null;
   }
-  
 
   /**
-   * Returns a sensor with an id passed as a parameter
+   * Devuelve el sensor cuyo id se corresponde con el pasado por parámetro
    */
   getSensor(id: string): Sensor {
     return this.sensors[id];
   }
 
+  /**
+   * Actualiza el componente pasado por parámetro si este existe en los datos almacenados
+   */
   setComponent(customComponent: CustomComponent) {
     if (customComponent.id) {
       this.components[customComponent.id] = customComponent;
     }
   }
 
-  // API CALLS
+  /**
+   * Borra los datos del modelo manejado por la aplicación
+   */
+  clearData() {
+    this.components = {};
+    this.sensors = {};
+    this._customComponentTypes = {};
+    this._sensorTypes = {};
+  }
 
+ /* ****************************
+  * LLAMADAS A LA API DE SENTILO
+  * **************************** */
+
+  /**
+   * Recupera todos los elementos (componentes, sensores y sus tipos) para el proveedor autenticado.
+   * 
+   * @returns true si se han recuperado y añadido a la app correctamente los datos
+   */
   findAllElements() {
 
     var observable = Observable.create((observer:any) => {
@@ -123,11 +150,13 @@ export class ModelService {
     });
 
     return observable;
-    
   }
 
   /**
+   * Actualiza un componente en la plataforma Sentilo con los datos pasados por parámetro, 
+   * añadiendo los sensores pasados por parámetro si es necesario.
    * 
+   * @returns la respuesta del servidor
    */
   updateComponent(customComponent: CustomComponent, sensorsToAdd: Array<Sensor>) {
     var objectPayload = {"sensors":[],"components":[]};
@@ -168,13 +197,12 @@ export class ModelService {
     }
 
     return from(this.nativeHttp.put(`${this.apiURL}/catalog/${this.providerName}`,objectPayload, this.headers));
-
   }
 
   /**
+   * Añade los sensores pasados por parámetro al componente indicado en la plataforma Sentilo
    * 
-   * @param customComponent 
-   * @param sensorsToAdd 
+   * @returns la respuesta del servidor
    */
   addSensors(customComponent: CustomComponent, sensorsToAdd: Array<Sensor>) {
 
@@ -212,6 +240,11 @@ export class ModelService {
     return from(this.nativeHttp.post(`${this.apiURL}/catalog/${this.providerName}`,objectPayload, this.headers));
   }
 
+  /**
+   * Recupera la última medición para todos los sensores que contiene el componente indicado por parámetro.
+   * 
+   * @returns true si se han recuperado y añadido a la app correctamente los datos
+   */
   getComponentMeasurements(customComponent: CustomComponent) {
     
     var sensorsMap = {};
@@ -232,7 +265,11 @@ export class ModelService {
     return observable;
   }
 
-
+  /**
+   * Añade la medición que contiene cada uno de los sensores pasados por parámetro a estos sensores.
+   * 
+   * @returns la respuesta del servidor
+   */
   addMeasurements(sensors: Array<Sensor>) {
     var objectPayload = {'sensors' : []};
     var sensorPayload = {}
@@ -258,10 +295,16 @@ export class ModelService {
     });
 
     return from(this.nativeHttp.put(`${this.apiURL}/data/${this.providerName}`,objectPayload, this.headers));
-  }//TODO error
+  }
 
-  // PARSERS
+ /* *******
+  * PARSERS
+  * ******* */
 
+  /**
+   * Formatea los datos recibidos para las entidades pertenecientes a un proveedor,
+   * almacenándolos en el modelo de datos que maneja la aplicación
+   */
   parseElements(rawData) : boolean {
     
     let result = false;
@@ -337,9 +380,12 @@ export class ModelService {
     }
 
     return result;
-    
   }
 
+  /**
+   * Formatea los datos recibidos de una serie de mediciones,
+   * almacenándolos en el modelo de datos que maneja la aplicación
+   */
   parseSensorsMeasurements (rawData, sensors) {
     if (rawData && rawData.data && JSON.parse(rawData.data)) {
       var sensorList = JSON.parse(rawData.data).sensors;
@@ -363,6 +409,9 @@ export class ModelService {
     }
   }
 
+  /**
+   * Formatea una fecha en UTC en el formato esperado por la plataforma Sentilo.
+   */
   parseTimeFromUTC(utcDate: string) : string {
     var parsedDate: string = '';
     var objectDate = new Date(utcDate);
@@ -377,10 +426,6 @@ export class ModelService {
     }
 
     return parsedDate;
-  }
-
-  cloneObject(obj) {
-    return obj;
   }
 
 }

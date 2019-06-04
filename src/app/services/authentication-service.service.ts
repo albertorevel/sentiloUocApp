@@ -7,7 +7,6 @@ import { Observable, from } from 'rxjs';
 })
 export class AuthenticationService {
 
-  // TODO comment RO values
   private _ready: boolean = false;
   private _logged: boolean = false;
   private _providerName: string = undefined;
@@ -16,6 +15,9 @@ export class AuthenticationService {
 
   constructor(private storage: Storage) { }
 
+  /**
+   * Autentica un usuario en la plataforma, persistiendo sus datos de acceso. 
+   */
   login(name: string, token: string, apiURL: string) {
     this._providerName = name;
     this._providerToken = token;
@@ -25,10 +27,16 @@ export class AuthenticationService {
     this._logged = true;
   }
 
+  /**
+   * Autentica un usuario en la plataforma, persistiendo sus datos de acceso. 
+   */
   logout() {
     this.storage.remove('provider_credentials');
   }
 
+  /**
+   * Comprueba si existen datos de una sesión de usuario en el dispositivo y los recupera.
+   */
   public checkLogin(): Observable<boolean> {
 
     return Observable.create((observer:any) => {
@@ -63,6 +71,10 @@ export class AuthenticationService {
    
   }
   
+ /* *******************
+  * Getters and setters
+  * ******************* */
+    
   public get logged(): boolean {
     return this._logged;
   }

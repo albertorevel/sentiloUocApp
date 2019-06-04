@@ -20,6 +20,7 @@
             </ion-card-header>
             <ion-card-content>
 
+                <!-- Lista de sensores de cada componente -->
                 <ion-list *ngFor="let sensor of component.sensors">
                     <ion-item>
                         <ion-label>{{sensor.id}} ({{sensor.type.id}})</ion-label>

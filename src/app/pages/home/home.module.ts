@@ -24,9 +24,5 @@ import { HomePage } from './home.page';
 export class HomePageModule {
 
   constructor (public router: Router) {}
-
-  navigate(route: string) {
-    this.router.navigate(['/measurement-view'])
-    console.log('module navigate')
-  }
+  
 }

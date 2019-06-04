@@ -11,6 +11,10 @@ export class SensorType {
         this.id = id;
     }
     
+    /* *******************
+     * Getters and setters
+     * ******************* */
+
     public get id(): string {
         return this._id;
     }

@@ -34,7 +34,8 @@ export class ComponentViewPage implements OnInit {
 
   ngOnInit() {
 
-    // We read parameters and prepare data
+    // Leemos los parámetros y preparamos los datos del componente. Dependiendo de los datos que llegan,
+    // se trata de la vista de un componente o de la creación de uno nuevo.
     var id = this.route.snapshot.paramMap.get('component-id');
 
     if (typeof id !== "undefined" && id != null) {
@@ -53,29 +54,41 @@ export class ComponentViewPage implements OnInit {
     this.customComponentTypes = this.modelService.getAllCustomComponentTypes();
   }
 
+  /**
+   * Añade un nuevo sensor a la lista de sensores a añadir al componente
+   */
   addSensor() {
     var newSensor: Sensor = new Sensor();
     newSensor.newId = this.counter++;
     this.newSensors.push(newSensor);
   }
 
+  /**
+   * Elimina el sensor indicado en el parámetro de la lista de sensores a añadir al componente
+   */
   removeSensor(newId: number) {
     this.newSensors = this.newSensors.filter(function(value, _index, _arr){
 
       return value.newId != newId;
-  });
+    });
   }
 
+  /**
+   * Activa el modo de edición de un componente
+   */
   enableModify() {
     this.modify = true;    
-    this.customComponent = this.modelService.cloneObject(this.customComponent);
+    this.customComponent = this.customComponent.getClone();
   }
 
+  /**
+   * Copia el componente y todos sus datos para la creación de uno nuevo.
+   */
   copyComponent() {
 
     this.modify = true;
     this.creation = true;    
-    this.customComponent = this.modelService.cloneObject(this.customComponent);
+    this.customComponent = this.customComponent.getClone();
     this.customComponent.id = '';
 
     while(this.customComponent.sensors.length > 0) {
@@ -87,6 +100,9 @@ export class ComponentViewPage implements OnInit {
     
   }
 
+  /**
+   * Cancela la edición o creación del componente.
+   */
   cancelComponent() {
     if (!this.creation) {
       this.modify = false;
@@ -96,6 +112,9 @@ export class ComponentViewPage implements OnInit {
     }
   }
 
+  /**
+   * Envía la información que se está editando del componente (existente o nuevo)
+   */
   submitComponent() {
 
     if(this.creation) {
@@ -113,13 +132,13 @@ export class ComponentViewPage implements OnInit {
             loadingElement.dismiss();
           }
           else {
-            this.submitError();
+            this.submitError(null);
             loadingElement.dismiss();
           }
           
         },
-        _error => {
-          this.submitError();
+        error => {
+          this.submitError(error);
           loadingElement.dismiss();
         });
       });
@@ -138,18 +157,21 @@ export class ComponentViewPage implements OnInit {
             loadingElement.dismiss();
           }
           else {
-            this.submitError();
+            this.submitError(null);
             loadingElement.dismiss();
           }
         },
-        _error => {
-          this.submitError();
+        error => {
+          this.submitError(error);
           loadingElement.dismiss();
         });
       });
     }
   }
 
+  /**
+   * Callback llamado cuando el envío de datos ha resultado satisfactorio
+   */
   submitSuccess() {
 
     this.appComponent.showToast('Datos añadidos correctamente.');
@@ -183,14 +205,40 @@ export class ComponentViewPage implements OnInit {
     
   }
 
-  submitError() {
-    this.appComponent.showToast('Ha ocurrido un error. Compruebe los datos introducidos y la conexión.');
+  /**
+   * Callback llamado cuando el envío de datos ha resultado erróneo
+   */
+  submitError(error) {
+    var message = '';
+
+    if (error != null) {
+      try {
+        JSON.parse(error.error).errorDetails.forEach( errorMessage => {
+          message += errorMessage + '\n'
+        });
+        if(error.error.includes('invalid value for field type') || error.error.includes('invalid value for field componentType')) {
+          message += 'El tipo indicado debe existir en su instancia de Sentilo';
+        }
+      } catch { }
+    }
+
+    if (message.length == 0) {
+      message = 'Ha ocurrido un error. Compruebe los datos introducidos y la conexión.';
+    }
+
+    this.appComponent.showToast(message);
   }
 
+  /**
+   * Dirige a la vista de las últimas medidas tomadas para los sensores del componente mostrado
+   */
   showMeasurements() {
     this.router.navigate(['measurement-view',this.customComponent.id, true]);
   }
 
+  /**
+   * Dirige a la adición de medidas tomadas para los sensores del componente mostrado
+   */
   addMeasurements() {
     this.router.navigate(['measurement-view',this.customComponent.id, false]);
   }
